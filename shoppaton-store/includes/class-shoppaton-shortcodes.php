@@ -46,6 +46,7 @@ class Shoppaton_Shortcodes {
             'shoppaton_cart',
             'shoppaton_checkout',
             'shoppaton_account',
+            'shoppaton_dashboard',
             'shoppaton_about',
             'shoppaton_shipping_returns',
             'shoppaton_track_order',
@@ -141,8 +142,16 @@ class Shoppaton_Shortcodes {
      * Account shortcode
      */
     public function account($atts) {
+        if (!is_user_logged_in()) {
+            // Show login/register form
+            ob_start();
+            include SHOPPATON_PLUGIN_DIR . 'templates/pages/login.php';
+            return ob_get_clean();
+        }
+
+        // Redirect to dashboard for logged in users
         ob_start();
-        include SHOPPATON_PLUGIN_DIR . 'templates/pages/account.php';
+        include SHOPPATON_PLUGIN_DIR . 'templates/pages/dashboard.php';
         return ob_get_clean();
     }
 
@@ -195,12 +204,25 @@ class Shoppaton_Shortcodes {
      * Admin dashboard shortcode
      */
     public function admin_dashboard($atts) {
-        if (!Shoppaton_User::is_admin()) {
+        if (!current_user_can('manage_options')) {
             return '<p>You do not have permission to access this page.</p>';
         }
 
         ob_start();
-        include SHOPPATON_PLUGIN_DIR . 'templates/pages/admin-dashboard.php';
+        include SHOPPATON_PLUGIN_DIR . 'templates/admin/dashboard.php';
+        return ob_get_clean();
+    }
+
+    /**
+     * User dashboard shortcode
+     */
+    public function dashboard($atts) {
+        if (!is_user_logged_in()) {
+            return '<p>Please <a href="' . esc_url(wp_login_url(get_permalink())) . '">log in</a> to view your dashboard.</p>';
+        }
+
+        ob_start();
+        include SHOPPATON_PLUGIN_DIR . 'templates/pages/dashboard.php';
         return ob_get_clean();
     }
 
