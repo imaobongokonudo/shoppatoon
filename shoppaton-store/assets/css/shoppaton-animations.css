@@ -1,0 +1,579 @@
+/**
+ * Shoppaton Store - Animations
+ * Swift, smooth animations for luxury experience
+ */
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(212, 175, 55, 0.5),
+                    0 0 10px rgba(212, 175, 55, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.8),
+                    0 0 30px rgba(212, 175, 55, 0.5);
+    }
+}
+
+@keyframes goldSparkle {
+    0%, 100% {
+        background-position: 0% 50%;
+        filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+    }
+    50% {
+        background-position: 100% 50%;
+        filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
+    }
+}
+
+@keyframes textShine {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+@keyframes borderGlow {
+    0%, 100% {
+        border-color: rgba(212, 175, 55, 0.3);
+    }
+    50% {
+        border-color: rgba(212, 175, 55, 0.8);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-15px);
+    }
+    60% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    14% {
+        transform: scale(1.1);
+    }
+    28% {
+        transform: scale(1);
+    }
+    42% {
+        transform: scale(1.1);
+    }
+    70% {
+        transform: scale(1);
+    }
+}
+
+/* Animation Classes */
+.shoppaton-animate {
+    animation-duration: 0.6s;
+    animation-fill-mode: both;
+}
+
+.shoppaton-animate.animate-on-scroll {
+    opacity: 0;
+}
+
+.shoppaton-animate.animate-on-scroll.animated {
+    opacity: 1;
+}
+
+.shoppaton-fade-in {
+    animation-name: fadeIn;
+}
+
+.shoppaton-fade-in-up {
+    animation-name: fadeInUp;
+}
+
+.shoppaton-fade-in-down {
+    animation-name: fadeInDown;
+}
+
+.shoppaton-fade-in-left {
+    animation-name: fadeInLeft;
+}
+
+.shoppaton-fade-in-right {
+    animation-name: fadeInRight;
+}
+
+.shoppaton-scale-in {
+    animation-name: scaleIn;
+}
+
+.shoppaton-slide-up {
+    animation-name: slideUp;
+}
+
+.shoppaton-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.shoppaton-glow {
+    animation: glow 2s ease-in-out infinite;
+}
+
+.shoppaton-sparkle {
+    animation: goldSparkle 3s ease-in-out infinite;
+    background-size: 200% 200%;
+}
+
+.shoppaton-heartbeat {
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+/* Animation Delays */
+.shoppaton-delay-1 { animation-delay: 0.1s; }
+.shoppaton-delay-2 { animation-delay: 0.2s; }
+.shoppaton-delay-3 { animation-delay: 0.3s; }
+.shoppaton-delay-4 { animation-delay: 0.4s; }
+.shoppaton-delay-5 { animation-delay: 0.5s; }
+.shoppaton-delay-6 { animation-delay: 0.6s; }
+.shoppaton-delay-7 { animation-delay: 0.7s; }
+.shoppaton-delay-8 { animation-delay: 0.8s; }
+.shoppaton-delay-9 { animation-delay: 0.9s; }
+.shoppaton-delay-10 { animation-delay: 1s; }
+
+/* Logo Sparkling Animation */
+.shoppaton-logo-sparkle {
+    position: relative;
+    display: inline-block;
+}
+
+.shoppaton-logo-sparkle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 70%
+    );
+    background-size: 200% 200%;
+    animation: textShine 3s linear infinite;
+    pointer-events: none;
+}
+
+/* Gold Text Animation */
+.shoppaton-gold-text-animated {
+    background: linear-gradient(
+        90deg,
+        #D4AF37 0%,
+        #F5E6C8 25%,
+        #D4AF37 50%,
+        #B8860B 75%,
+        #D4AF37 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textShine 4s linear infinite;
+}
+
+/* Button Hover Effects */
+.shoppaton-btn-animated {
+    position: relative;
+    overflow: hidden;
+}
+
+.shoppaton-btn-animated::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 50%;
+    transform: scale(1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.shoppaton-btn-animated:focus::after {
+    animation: ripple 0.6s ease-out;
+}
+
+/* Card Hover Animation */
+.shoppaton-card-hover {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.shoppaton-card-hover:hover {
+    transform: translateY(-10px) scale(1.02);
+}
+
+/* Image Reveal Animation */
+.shoppaton-reveal {
+    position: relative;
+    overflow: hidden;
+}
+
+.shoppaton-reveal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--shoppaton-gold);
+    z-index: 2;
+    transform: translateX(-100%);
+}
+
+.shoppaton-reveal.revealed::before {
+    animation: revealLeft 0.8s ease forwards;
+}
+
+@keyframes revealLeft {
+    0% {
+        transform: translateX(-100%);
+    }
+    50% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Stagger Animation for Lists */
+.shoppaton-stagger > * {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.shoppaton-stagger > *:nth-child(1) { animation-delay: 0.1s; }
+.shoppaton-stagger > *:nth-child(2) { animation-delay: 0.2s; }
+.shoppaton-stagger > *:nth-child(3) { animation-delay: 0.3s; }
+.shoppaton-stagger > *:nth-child(4) { animation-delay: 0.4s; }
+.shoppaton-stagger > *:nth-child(5) { animation-delay: 0.5s; }
+.shoppaton-stagger > *:nth-child(6) { animation-delay: 0.6s; }
+.shoppaton-stagger > *:nth-child(7) { animation-delay: 0.7s; }
+.shoppaton-stagger > *:nth-child(8) { animation-delay: 0.8s; }
+
+/* Slider Fade Transition */
+.shoppaton-slider-fade {
+    position: relative;
+}
+
+.shoppaton-slider-fade > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.shoppaton-slider-fade > *.active {
+    position: relative;
+    opacity: 1;
+}
+
+/* Smooth Section Transitions */
+.shoppaton-section-transition {
+    position: relative;
+}
+
+.shoppaton-section-transition::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, var(--shoppaton-black), transparent);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.shoppaton-section-transition::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to top, var(--shoppaton-black), transparent);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Parallax Effect */
+.shoppaton-parallax {
+    transform: translateY(0);
+    will-change: transform;
+    transition: transform 0.1s linear;
+}
+
+/* Counter Animation */
+.shoppaton-counter {
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.shoppaton-counter.counting {
+    animation: bounce 0.3s ease;
+}
+
+/* Loading Skeleton */
+.shoppaton-skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--shoppaton-glass) 25%,
+        rgba(255, 255, 255, 0.05) 50%,
+        var(--shoppaton-glass) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton 1.5s ease infinite;
+    border-radius: var(--border-radius);
+}
+
+@keyframes skeleton {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Notification Pop */
+.shoppaton-notification-pop {
+    animation: notificationPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes notificationPop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Cart Add Animation */
+.shoppaton-cart-add {
+    animation: cartAdd 0.5s ease;
+}
+
+@keyframes cartAdd {
+    0% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.3);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Success Checkmark */
+.shoppaton-checkmark {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 2;
+    stroke: var(--shoppaton-gold);
+    stroke-miterlimit: 10;
+    margin: 10% auto;
+    box-shadow: inset 0px 0px 0px var(--shoppaton-gold);
+    animation: fill 0.4s ease-in-out 0.4s forwards,
+               scale 0.3s ease-in-out 0.9s both;
+}
+
+.shoppaton-checkmark-circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    stroke: var(--shoppaton-gold);
+    fill: none;
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.shoppaton-checkmark-check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes scale {
+    0%, 100% {
+        transform: none;
+    }
+    50% {
+        transform: scale3d(1.1, 1.1, 1);
+    }
+}
+
+@keyframes fill {
+    100% {
+        box-shadow: inset 0px 0px 0px 30px rgba(212, 175, 55, 0.1);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
