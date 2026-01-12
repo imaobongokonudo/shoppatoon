@@ -151,12 +151,12 @@ class Shoppaton_User {
             $wpdb->delete($table, array('id' => $existing));
             return false;
         } else {
-            $wpdb->insert($table, array(
+            $result = $wpdb->insert($table, array(
                 'user_id' => $user_id ?: null,
                 'session_id' => $session_id,
                 'product_id' => $product_id,
             ));
-            return true;
+            return $result !== false;
         }
     }
 
