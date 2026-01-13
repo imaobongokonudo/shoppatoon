@@ -36,38 +36,24 @@ add_filter('body_class', function($classes) {
                 </ul>
 
                 <div class="shoppaton-nav-icons">
-                    <!-- Search -->
-                    <div class="shoppaton-search-wrapper">
-                        <button class="shoppaton-nav-icon shoppaton-search-toggle" aria-label="Search">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"/>
-                                <path d="M21 21l-4.35-4.35"/>
-                            </svg>
-                        </button>
-                        <div class="shoppaton-search-dropdown">
-                            <form class="shoppaton-search-form" action="<?php echo esc_url(get_permalink(get_page_by_path('shop'))); ?>">
-                                <input type="search" name="search" class="shoppaton-search-input" placeholder="Search products...">
-                                <button type="submit" class="shoppaton-search-btn">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="11" cy="11" r="8"/>
-                                        <path d="M21 21l-4.35-4.35"/>
-                                    </svg>
-                                </button>
-                            </form>
-                            <div class="shoppaton-search-results"></div>
-                        </div>
-                    </div>
+                    <!-- Search Icon Only -->
+                    <button class="shoppaton-nav-icon shoppaton-search-toggle" aria-label="Search">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </button>
 
                     <!-- Wishlist -->
                     <a href="<?php echo esc_url(get_permalink(get_page_by_path('wishlist'))); ?>" class="shoppaton-nav-icon" aria-label="Wishlist">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                         </svg>
                     </a>
 
                     <!-- Cart -->
                     <a href="<?php echo esc_url(get_permalink(get_page_by_path('cart'))); ?>" class="shoppaton-nav-icon" aria-label="Cart">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="9" cy="21" r="1"/>
                             <circle cx="20" cy="21" r="1"/>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
@@ -77,26 +63,16 @@ add_filter('body_class', function($classes) {
 
                     <!-- Account -->
                     <a href="<?php echo esc_url(get_permalink(get_page_by_path('my-account'))); ?>" class="shoppaton-nav-icon" aria-label="Account">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                             <circle cx="12" cy="7" r="4"/>
                         </svg>
                     </a>
 
                     <!-- Shop Now Button -->
-                    <a href="<?php echo esc_url(get_permalink(get_page_by_path('shop'))); ?>" class="shoppaton-btn shoppaton-btn-primary shoppaton-btn-animated">
+                    <a href="<?php echo esc_url(get_permalink(get_page_by_path('shop'))); ?>" class="shoppaton-btn shoppaton-btn-primary shoppaton-btn-sm">
                         Shop Now
                     </a>
-                </div>
-
-                <!-- Mobile Icons -->
-                <div class="shoppaton-mobile-icons" style="display: none;">
-                    <button class="shoppaton-nav-icon shoppaton-search-toggle-mobile" aria-label="Search">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/>
-                            <path d="M21 21l-4.35-4.35"/>
-                        </svg>
-                    </button>
                 </div>
 
                 <!-- Hamburger Menu -->

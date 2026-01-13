@@ -69,19 +69,22 @@ class Shoppaton_Widgets {
      */
     private function render_scroll_to_top() {
         ?>
-        <div class="shoppaton-scroll-top">
-            <div class="shoppaton-scroll-progress">
-                <svg viewBox="0 0 50 50">
-                    <circle class="progress-bg" cx="25" cy="25" r="20"></circle>
-                    <circle class="progress-bar" cx="25" cy="25" r="20"></circle>
-                </svg>
-            </div>
-            <button class="shoppaton-scroll-top-btn" aria-label="Scroll to top">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                    <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
-                </svg>
-            </button>
-        </div>
+        <button class="shoppaton-scroll-top" aria-label="Scroll to top">
+            <svg class="shoppaton-scroll-progress-ring" viewBox="0 0 44 44">
+                <defs>
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#D4AF37"/>
+                        <stop offset="50%" stop-color="#F5E6C8"/>
+                        <stop offset="100%" stop-color="#D4AF37"/>
+                    </linearGradient>
+                </defs>
+                <circle class="progress-bg" cx="22" cy="22" r="20" fill="none" stroke="rgba(212,175,55,0.2)" stroke-width="2"/>
+                <circle class="progress-bar" cx="22" cy="22" r="20" fill="none" stroke="url(#goldGradient)" stroke-width="2" stroke-dasharray="126" stroke-dashoffset="126"/>
+            </svg>
+            <svg class="shoppaton-scroll-arrow" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+            </svg>
+        </button>
         <?php
     }
 }

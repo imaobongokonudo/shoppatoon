@@ -231,15 +231,94 @@ a:hover {
     color: var(--shoppaton-gold);
 }
 
+/* Small button for header */
+.shoppaton-btn-sm {
+    padding: 8px 16px;
+    font-size: 11px;
+}
+
+/* Search Overlay */
+.shoppaton-search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 1001;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 120px;
+}
+
+.shoppaton-search-overlay.active {
+    display: flex;
+}
+
+.shoppaton-search-overlay-content {
+    width: 100%;
+    max-width: 600px;
+    padding: 0 20px;
+}
+
+.shoppaton-search-overlay-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: var(--shoppaton-gold);
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.shoppaton-search-overlay-form {
+    display: flex;
+    background: var(--shoppaton-glass);
+    border: 1px solid var(--shoppaton-gold);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.shoppaton-search-overlay-form input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 15px 20px;
+    color: var(--shoppaton-white);
+    font-size: 16px;
+    outline: none;
+}
+
+.shoppaton-search-overlay-form input::placeholder {
+    color: var(--shoppaton-text-muted);
+}
+
+.shoppaton-search-overlay-form button {
+    background: var(--shoppaton-gold);
+    border: none;
+    padding: 15px 25px;
+    color: var(--shoppaton-black);
+    cursor: pointer;
+}
+
+.shoppaton-search-results-overlay {
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
 /* Header */
 .shoppaton-header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 70px;
+    height: 60px;
     z-index: 1000;
-    background: rgba(10, 10, 10, 0.95);
+    background: rgba(10, 10, 10, 0.98);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border-bottom: 1px solid var(--shoppaton-glass-border);
@@ -247,7 +326,7 @@ a:hover {
 
 /* Add body padding to prevent content from being hidden under fixed header */
 body.shoppaton-has-header {
-    padding-top: 70px;
+    padding-top: 60px;
 }
 
 .shoppaton-header-inner {
@@ -264,9 +343,9 @@ body.shoppaton-has-header {
 }
 
 .shoppaton-logo img {
-    height: 50px;
+    height: 40px;
     width: auto;
-    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+    filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
 }
 
 /* Logo sparkle only for footer and specific sections */
@@ -1154,14 +1233,21 @@ body.shoppaton-has-header {
     }
 }
 
-/* Scroll to Top with Progress */
+/* Scroll to Top - Single Circle */
 .shoppaton-scroll-top {
     position: fixed;
     bottom: 100px;
     left: 20px;
     z-index: 999;
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(10, 10, 10, 0.9);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     opacity: 0;
     visibility: hidden;
     transition: var(--transition-normal);
@@ -1172,71 +1258,30 @@ body.shoppaton-has-header {
     visibility: visible;
 }
 
-.shoppaton-scroll-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+.shoppaton-scroll-top:hover {
+    background: var(--shoppaton-gold);
 }
 
-.shoppaton-scroll-progress svg {
+.shoppaton-scroll-top:hover .shoppaton-scroll-arrow {
+    color: var(--shoppaton-black);
+}
+
+.shoppaton-scroll-progress-ring {
+    position: absolute;
     width: 100%;
     height: 100%;
     transform: rotate(-90deg);
 }
 
-.shoppaton-scroll-progress circle {
-    fill: none;
-    stroke-width: 3;
-}
-
-.shoppaton-scroll-progress .progress-bg {
-    stroke: var(--shoppaton-glass-border);
-}
-
-.shoppaton-scroll-progress .progress-bar {
-    stroke: url(#goldGradient);
-    stroke-dasharray: 126;
-    stroke-dashoffset: 126;
+.shoppaton-scroll-progress-ring .progress-bar {
     transition: stroke-dashoffset 0.15s ease-out;
     stroke-linecap: round;
 }
 
-/* Improved scroll to top styling */
-.shoppaton-scroll-top {
-    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
-}
-
-.shoppaton-scroll-top.visible {
-    animation: fadeInUp 0.3s ease;
-}
-
-.shoppaton-scroll-progress circle {
-    stroke-linecap: round;
-}
-
-.shoppaton-scroll-top-btn {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 40px;
-    height: 40px;
-    background: var(--shoppaton-glass);
-    backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--shoppaton-gold);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.shoppaton-scroll-arrow {
     color: var(--shoppaton-gold);
-    cursor: pointer;
+    z-index: 1;
     transition: var(--transition-fast);
-}
-
-.shoppaton-scroll-top-btn:hover {
-    background: var(--shoppaton-gold);
-    color: var(--shoppaton-black);
 }
 
 /* Cart Page */

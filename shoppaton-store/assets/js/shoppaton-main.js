@@ -43,6 +43,47 @@
 
                 lastScroll = currentScroll;
             });
+
+            // Search toggle
+            const searchOverlay = $(`
+                <div class="shoppaton-search-overlay">
+                    <button class="shoppaton-search-overlay-close">&times;</button>
+                    <div class="shoppaton-search-overlay-content">
+                        <form class="shoppaton-search-overlay-form" action="${$('.shoppaton-header').length ? window.location.origin + '/shop' : '/shop'}">
+                            <input type="search" name="search" placeholder="Search products..." class="shoppaton-search-input" autocomplete="off">
+                            <button type="submit">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="M21 21l-4.35-4.35"/>
+                                </svg>
+                            </button>
+                        </form>
+                        <div class="shoppaton-search-results-overlay"></div>
+                    </div>
+                </div>
+            `);
+            $('body').append(searchOverlay);
+
+            $('.shoppaton-search-toggle').on('click', function() {
+                searchOverlay.addClass('active');
+                searchOverlay.find('input').focus();
+            });
+
+            searchOverlay.find('.shoppaton-search-overlay-close').on('click', function() {
+                searchOverlay.removeClass('active');
+            });
+
+            searchOverlay.on('click', function(e) {
+                if ($(e.target).hasClass('shoppaton-search-overlay')) {
+                    searchOverlay.removeClass('active');
+                }
+            });
+
+            $(document).on('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    searchOverlay.removeClass('active');
+                }
+            });
         },
 
         // Mobile menu
@@ -126,7 +167,6 @@
         scrollToTop: function() {
             const scrollTop = $('.shoppaton-scroll-top');
             const progressBar = scrollTop.find('.progress-bar');
-            const btn = scrollTop.find('.shoppaton-scroll-top-btn');
 
             $(window).on('scroll', function() {
                 const scrollHeight = $(document).height() - $(window).height();
@@ -142,7 +182,7 @@
                 progressBar.css('stroke-dashoffset', 126 - progress);
             });
 
-            btn.on('click', function() {
+            scrollTop.on('click', function() {
                 $('html, body').animate({ scrollTop: 0 }, 600);
             });
         },
