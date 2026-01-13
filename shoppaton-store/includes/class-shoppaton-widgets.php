@@ -69,22 +69,111 @@ class Shoppaton_Widgets {
      */
     private function render_scroll_to_top() {
         ?>
+        <style>
+        /* Scroll to Top - Single Circle with Gold Arrow */
+        .shoppaton-scroll-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #D4AF37;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+        .shoppaton-scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .shoppaton-scroll-top:hover {
+            background: #D4AF37;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+            transform: translateY(-3px);
+        }
+        .shoppaton-scroll-top:hover .scroll-arrow {
+            stroke: #0a0a0a;
+        }
+        /* Progress Ring */
+        .shoppaton-scroll-progress {
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 56px;
+            height: 56px;
+            transform: rotate(-90deg);
+        }
+        .shoppaton-scroll-progress circle {
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+        }
+        .progress-track {
+            stroke: rgba(212, 175, 55, 0.2);
+        }
+        .progress-fill {
+            stroke: #D4AF37;
+            stroke-dasharray: 163;
+            stroke-dashoffset: 163;
+            transition: stroke-dashoffset 0.1s;
+        }
+        /* Arrow Icon */
+        .scroll-arrow {
+            width: 20px;
+            height: 20px;
+            stroke: #D4AF37;
+            stroke-width: 2.5;
+            fill: none;
+            transition: stroke 0.3s;
+        }
+        </style>
         <button class="shoppaton-scroll-top" aria-label="Scroll to top">
-            <svg class="shoppaton-scroll-progress-ring" viewBox="0 0 44 44">
-                <defs>
-                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#D4AF37"/>
-                        <stop offset="50%" stop-color="#F5E6C8"/>
-                        <stop offset="100%" stop-color="#D4AF37"/>
-                    </linearGradient>
-                </defs>
-                <circle class="progress-bg" cx="22" cy="22" r="20" fill="none" stroke="rgba(212,175,55,0.2)" stroke-width="2"/>
-                <circle class="progress-bar" cx="22" cy="22" r="20" fill="none" stroke="url(#goldGradient)" stroke-width="2" stroke-dasharray="126" stroke-dashoffset="126"/>
+            <svg class="shoppaton-scroll-progress" viewBox="0 0 56 56">
+                <circle class="progress-track" cx="28" cy="28" r="26"/>
+                <circle class="progress-fill" cx="28" cy="28" r="26"/>
             </svg>
-            <svg class="shoppaton-scroll-arrow" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+            <svg class="scroll-arrow" viewBox="0 0 24 24">
+                <polyline points="18 15 12 9 6 15"/>
             </svg>
         </button>
+        <script>
+        (function() {
+            var btn = document.querySelector('.shoppaton-scroll-top');
+            var progressCircle = document.querySelector('.progress-fill');
+            if (!btn || !progressCircle) return;
+            
+            var circumference = 2 * Math.PI * 26;
+            progressCircle.style.strokeDasharray = circumference;
+            
+            function updateProgress() {
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                var scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0;
+                var offset = circumference - (scrollPercent * circumference);
+                progressCircle.style.strokeDashoffset = offset;
+                
+                if (scrollTop > 300) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            }
+            
+            window.addEventListener('scroll', updateProgress);
+            btn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            updateProgress();
+        })();
+        </script>
         <?php
     }
 }
