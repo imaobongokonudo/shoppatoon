@@ -387,12 +387,88 @@
 }
 
 .shoppaton-admin-wrap input[type="checkbox"] {
-    border-color: rgba(212, 175, 55, 0.5);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(212, 175, 55, 0.5);
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
 }
 
 .shoppaton-admin-wrap input[type="checkbox"]:checked {
     background: #D4AF37;
     border-color: #D4AF37;
+}
+
+.shoppaton-admin-wrap input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid #0a0a0a;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.shoppaton-admin-wrap input[type="checkbox"]:hover {
+    border-color: #D4AF37;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+/* Global WordPress Admin Checkbox/Radio Styling */
+#wpcontent input[type="checkbox"],
+#wpbody input[type="checkbox"],
+.wp-admin input[type="checkbox"] {
+    accent-color: #D4AF37 !important;
+}
+
+#wpcontent input[type="radio"],
+#wpbody input[type="radio"],
+.wp-admin input[type="radio"] {
+    accent-color: #D4AF37 !important;
+}
+
+/* Radio buttons in shoppaton admin */
+.shoppaton-admin-wrap input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(212, 175, 55, 0.5);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.shoppaton-admin-wrap input[type="radio"]:checked {
+    border-color: #D4AF37;
+}
+
+.shoppaton-admin-wrap input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: #D4AF37;
+    border-radius: 50%;
+}
+
+.shoppaton-admin-wrap input[type="radio"]:hover {
+    border-color: #D4AF37;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
 
 /* Notice styling */

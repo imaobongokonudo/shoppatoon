@@ -282,6 +282,95 @@ textarea::placeholder {
     opacity: 0.7;
 }
 
+/* Global Checkbox Styling - Sparkling Gold Theme */
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--shoppaton-gold);
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition-fast);
+}
+
+input[type="checkbox"]:checked {
+    background: var(--shoppaton-gold);
+    border-color: var(--shoppaton-gold);
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--shoppaton-black);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+input[type="checkbox"]:hover {
+    border-color: var(--shoppaton-gold-light);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
+/* Global Radio Button Styling - Sparkling Gold Theme */
+input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--shoppaton-gold);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition-fast);
+}
+
+input[type="radio"]:checked {
+    border-color: var(--shoppaton-gold);
+}
+
+input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: var(--shoppaton-gold);
+    border-radius: 50%;
+}
+
+input[type="radio"]:hover {
+    border-color: var(--shoppaton-gold-light);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+input[type="radio"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
+/* WordPress Admin Checkbox/Radio Overrides */
+.wp-admin input[type="checkbox"],
+.wp-admin input[type="radio"] {
+    accent-color: var(--shoppaton-gold, #D4AF37) !important;
+}
+
 /* Search Overlay */
 .shoppaton-search-overlay {
     position: fixed;
