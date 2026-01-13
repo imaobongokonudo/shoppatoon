@@ -237,24 +237,25 @@ a:hover {
     top: 0;
     left: 0;
     width: 100%;
+    height: 70px;
     z-index: 1000;
-    background: var(--shoppaton-glass);
-    backdrop-filter: var(--glass-blur) var(--glass-saturate);
-    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border-bottom: 1px solid var(--shoppaton-glass-border);
-    transition: var(--transition-normal);
 }
 
-.shoppaton-header.scrolled {
-    background: rgba(10, 10, 10, 0.95);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+/* Add body padding to prevent content from being hidden under fixed header */
+body.shoppaton-has-header {
+    padding-top: 70px;
 }
 
 .shoppaton-header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 0;
+    height: 100%;
+    padding: 0;
 }
 
 .shoppaton-logo {
@@ -263,9 +264,9 @@ a:hover {
 }
 
 .shoppaton-logo img {
-    height: 70px;
+    height: 50px;
     width: auto;
-    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
 }
 
 /* Logo sparkle only for footer and specific sections */

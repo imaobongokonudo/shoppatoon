@@ -11,7 +11,14 @@ if (!defined('ABSPATH')) {
 
 $cart_count = Shoppaton_Cart::instance()->get_count();
 $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
+
+// Add body class for fixed header padding
+add_filter('body_class', function($classes) {
+    $classes[] = 'shoppaton-has-header';
+    return $classes;
+});
 ?>
+<script>document.body.classList.add('shoppaton-has-header');</script>
 <header class="shoppaton-header">
     <div class="shoppaton-container">
         <div class="shoppaton-header-inner">
