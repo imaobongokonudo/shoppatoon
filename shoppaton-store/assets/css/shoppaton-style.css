@@ -101,17 +101,17 @@ h1, h2, h3, h4, h5, h6 {
     background-clip: text;
 }
 
-h1 { font-size: clamp(1.75rem, 4vw, 2.75rem); }
-h2 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
-h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
-h4 { font-size: clamp(1.1rem, 2vw, 1.35rem); }
-h5 { font-size: 1.1rem; }
-h6 { font-size: 0.95rem; }
+h1 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
+h2 { font-size: clamp(1.25rem, 3vw, 1.85rem); }
+h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); }
+h4 { font-size: clamp(1rem, 1.5vw, 1.2rem); }
+h5 { font-size: 0.95rem; }
+h6 { font-size: 0.85rem; }
 
 p {
     color: var(--shoppaton-text);
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
+    margin-bottom: 0.85rem;
+    font-size: 0.8rem;
 }
 
 a {
@@ -154,10 +154,10 @@ a:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 10px 20px;
+    gap: 5px;
+    padding: 8px 16px;
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -233,8 +233,17 @@ a:hover {
 
 /* Small button for header */
 .shoppaton-btn-sm {
-    padding: 8px 16px;
-    font-size: 11px;
+    padding: 6px 12px;
+    font-size: 10px;
+}
+
+/* Form placeholders in sparkling gold */
+.shoppaton-form-input::placeholder,
+.shoppaton-form-textarea::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: var(--shoppaton-gold) !important;
+    opacity: 0.7;
 }
 
 /* Search Overlay */
@@ -378,8 +387,8 @@ body.shoppaton-has-header {
 .shoppaton-nav-menu li a {
     color: var(--shoppaton-gold);
     font-weight: 500;
-    font-size: 0.85rem;
-    padding: 8px 0;
+    font-size: 0.8rem;
+    padding: 6px 0;
     position: relative;
     text-decoration: none !important;
     transition: var(--transition-fast);
@@ -615,10 +624,10 @@ body.shoppaton-has-header {
 
 .shoppaton-section-subtitle {
     color: var(--shoppaton-gold);
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 15px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
 }
 
 .shoppaton-section-title {
@@ -1042,16 +1051,17 @@ body.shoppaton-has-header {
 }
 
 .shoppaton-footer-links li a {
-    color: var(--shoppaton-text-muted);
+    color: var(--shoppaton-gold);
     transition: var(--transition-fast);
     text-decoration: none !important;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .shoppaton-footer-links li a:hover {
-    color: var(--shoppaton-gold);
+    color: var(--shoppaton-gold-light);
     padding-left: 10px;
     text-decoration: none !important;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 .shoppaton-footer-contact {
@@ -1140,19 +1150,20 @@ body.shoppaton-has-header {
     opacity: 1;
 }
 
-/* Mobile Bottom Navigation */
+/* Mobile Bottom Navigation - Always visible on mobile */
 .shoppaton-mobile-bottom-nav {
     display: none;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background: var(--shoppaton-glass);
+    background: rgba(10, 10, 10, 0.98);
     backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
     border-top: 1px solid var(--shoppaton-glass-border);
-    z-index: 1000;
-    padding: 10px 0;
-    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    z-index: 1001;
+    padding: 8px 0;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
 }
 
 .shoppaton-mobile-nav-items {
@@ -1165,18 +1176,18 @@ body.shoppaton-has-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 3px;
     color: var(--shoppaton-text-muted);
-    font-size: 10px;
-    text-decoration: none;
+    font-size: 9px;
+    text-decoration: none !important;
     transition: var(--transition-fast);
-    padding: 5px 15px;
+    padding: 4px 12px;
     position: relative;
 }
 
 .shoppaton-mobile-nav-item svg {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
 }
 
 .shoppaton-mobile-nav-item.active,
@@ -1196,32 +1207,37 @@ body.shoppaton-has-header {
     border-radius: 0 0 5px 5px;
 }
 
-/* WhatsApp Widget */
+/* WhatsApp Widget - Smaller */
 .shoppaton-whatsapp-widget {
     position: fixed;
     bottom: 100px;
-    right: 20px;
+    right: 15px;
     z-index: 999;
 }
 
 .shoppaton-whatsapp-btn {
-    width: 60px;
-    height: 60px;
+    width: 44px;
+    height: 44px;
     background: #25D366;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 30px;
-    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    font-size: 22px;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
     transition: var(--transition-normal);
     animation: pulse 2s infinite;
 }
 
+.shoppaton-whatsapp-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
 .shoppaton-whatsapp-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+    box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
 }
 
 @keyframes pulse {
@@ -1233,14 +1249,14 @@ body.shoppaton-has-header {
     }
 }
 
-/* Scroll to Top - Single Circle */
+/* Scroll to Top - Smaller Single Circle */
 .shoppaton-scroll-top {
     position: fixed;
     bottom: 100px;
-    left: 20px;
+    left: 15px;
     z-index: 999;
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background: rgba(10, 10, 10, 0.9);
     border: none;
@@ -1584,11 +1600,21 @@ body.shoppaton-has-header {
 
 @media (max-width: 768px) {
     .shoppaton-mobile-bottom-nav {
-        display: block;
+        display: block !important;
     }
 
     body {
-        padding-bottom: 80px;
+        padding-bottom: 70px;
+    }
+    
+    /* Hide icons in header on mobile - move to hamburger */
+    .shoppaton-nav-actions .shoppaton-icon-btn,
+    .shoppaton-nav-actions .shop-btn {
+        display: none !important;
+    }
+    
+    .shoppaton-nav-actions .shoppaton-hamburger {
+        display: flex !important;
     }
 
     .shoppaton-footer-grid {

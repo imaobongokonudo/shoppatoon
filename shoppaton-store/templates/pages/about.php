@@ -66,8 +66,11 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
                 <div class="shoppaton-glass-card shoppaton-animate animate-on-scroll shoppaton-fade-in-up" style="padding: 40px; text-align: center;">
-                    <div style="width: 80px; height: 80px; background: var(--shoppaton-gold-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; font-size: 36px;">
-                        ✨
+                    <div style="width: 70px; height: 70px; background: var(--shoppaton-gold-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
                     </div>
                     <h3 style="color: var(--shoppaton-white); -webkit-text-fill-color: var(--shoppaton-white); margin-bottom: 15px;">Authenticity</h3>
                     <p style="color: var(--shoppaton-text-muted);">
@@ -77,8 +80,11 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
                 </div>
                 
                 <div class="shoppaton-glass-card shoppaton-animate animate-on-scroll shoppaton-fade-in-up shoppaton-delay-2" style="padding: 40px; text-align: center;">
-                    <div style="width: 80px; height: 80px; background: var(--shoppaton-gold-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; font-size: 36px;">
-                        💎
+                    <div style="width: 70px; height: 70px; background: var(--shoppaton-gold-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                        </svg>
                     </div>
                     <h3 style="color: var(--shoppaton-white); -webkit-text-fill-color: var(--shoppaton-white); margin-bottom: 15px;">Quality</h3>
                     <p style="color: var(--shoppaton-text-muted);">
@@ -88,8 +94,13 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
                 </div>
                 
                 <div class="shoppaton-glass-card shoppaton-animate animate-on-scroll shoppaton-fade-in-up shoppaton-delay-4" style="padding: 40px; text-align: center;">
-                    <div style="width: 80px; height: 80px; background: var(--shoppaton-gold-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; font-size: 36px;">
-                        🤝
+                    <div style="width: 70px; height: 70px; background: var(--shoppaton-gold-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
                     </div>
                     <h3 style="color: var(--shoppaton-white); -webkit-text-fill-color: var(--shoppaton-white); margin-bottom: 15px;">Trust</h3>
                     <p style="color: var(--shoppaton-text-muted);">
