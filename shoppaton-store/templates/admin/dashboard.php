@@ -1563,6 +1563,194 @@ jQuery(document).ready(function($) {
         $('#usage-guide-image-preview').html('<span style="color: var(--shoppaton-text-muted); font-size: 11px; text-align: center;">No Guide Image</span>');
         $('#product-usage-guide-image').val('');
     });
+    
+    // Media Management - Hero Slides, About Image, Logo Upload
+    var siteMedia = {
+        hero_slides: [],
+        about_image: '',
+        logo: ''
+    };
+    
+    // Load existing media from options
+    function loadSiteMedia() {
+        $.ajax({
+            url: shoppatonData.ajaxUrl,
+            type: 'POST',
+            data: {
+                action: 'shoppaton_get_site_media',
+                nonce: shoppatonData.nonce
+            },
+            success: function(response) {
+                if (response.success && response.data) {
+                    siteMedia = response.data;
+                    renderSiteMediaPreviews();
+                }
+            }
+        });
+    }
+    
+    function renderSiteMediaPreviews() {
+        // Hero slides
+        if (siteMedia.hero_slides && siteMedia.hero_slides.length > 0) {
+            var heroHtml = '';
+            siteMedia.hero_slides.forEach(function(url, index) {
+                heroHtml += '<div class="site-media-item" style="position: relative; display: inline-block; margin: 5px;">' +
+                    '<img src="' + url + '" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">' +
+                    '<button type="button" class="remove-site-media" data-field="hero_slides" data-index="' + index + '" style="position: absolute; top: -5px; right: -5px; background: #ff4444; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;">&times;</button>' +
+                    '</div>';
+            });
+            $('#hero-slides-preview').html(heroHtml);
+        } else {
+            $('#hero-slides-preview').html('<p style="color: var(--shoppaton-text-muted); font-size: 11px;">No hero slides uploaded yet</p>');
+        }
+        
+        // About image
+        if (siteMedia.about_image) {
+            $('#about-image-preview').html(
+                '<div class="site-media-item" style="position: relative; display: inline-block;">' +
+                '<img src="' + siteMedia.about_image + '" style="width: 100%; max-width: 200px; height: 120px; object-fit: cover; border-radius: 8px;">' +
+                '<button type="button" class="remove-site-media" data-field="about_image" style="position: absolute; top: -5px; right: -5px; background: #ff4444; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;">&times;</button>' +
+                '</div>'
+            );
+        } else {
+            $('#about-image-preview').html('<p style="color: var(--shoppaton-text-muted); font-size: 11px;">No about image uploaded yet</p>');
+        }
+        
+        // Logo
+        if (siteMedia.logo) {
+            $('#logo-preview').html(
+                '<div class="site-media-item" style="position: relative; display: inline-block;">' +
+                '<img src="' + siteMedia.logo + '" style="width: 100%; max-width: 150px; height: 80px; object-fit: contain; border-radius: 8px; background: #222;">' +
+                '<button type="button" class="remove-site-media" data-field="logo" style="position: absolute; top: -5px; right: -5px; background: #ff4444; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;">&times;</button>' +
+                '</div>'
+            );
+        } else {
+            $('#logo-preview').html('<p style="color: var(--shoppaton-text-muted); font-size: 11px;">No logo uploaded yet</p>');
+        }
+    }
+    
+    // Handle site media upload buttons
+    $(document).on('click', '.shoppaton-upload-btn', function(e) {
+        e.preventDefault();
+        var field = $(this).data('field');
+        var isMultiple = field === 'hero_slides';
+        
+        console.log('Upload button clicked for field:', field);
+        
+        if (typeof wp !== 'undefined' && wp.media) {
+            var mediaUploader = wp.media({
+                title: isMultiple ? 'Select Images for ' + field.replace('_', ' ') : 'Select Image for ' + field.replace('_', ' '),
+                button: {
+                    text: isMultiple ? 'Add Images' : 'Use This Image'
+                },
+                multiple: isMultiple
+            });
+            
+            mediaUploader.on('select', function() {
+                if (isMultiple) {
+                    var attachments = mediaUploader.state().get('selection').toJSON();
+                    attachments.forEach(function(attachment) {
+                        siteMedia.hero_slides.push(attachment.url);
+                    });
+                } else {
+                    var attachment = mediaUploader.state().get('selection').first().toJSON();
+                    siteMedia[field] = attachment.url;
+                }
+                
+                // Save to database
+                saveSiteMedia(function() {
+                    renderSiteMediaPreviews();
+                });
+            });
+            
+            mediaUploader.open();
+        } else {
+            // Fallback: prompt for image URL
+            var imageUrl = prompt('Enter image URL:');
+            if (imageUrl) {
+                if (isMultiple) {
+                    siteMedia.hero_slides.push(imageUrl);
+                } else {
+                    siteMedia[field] = imageUrl;
+                }
+                saveSiteMedia(function() {
+                    renderSiteMediaPreviews();
+                });
+            }
+        }
+    });
+    
+    // Remove site media
+    $(document).on('click', '.remove-site-media', function() {
+        var field = $(this).data('field');
+        var index = $(this).data('index');
+        
+        if (field === 'hero_slides' && typeof index !== 'undefined') {
+            siteMedia.hero_slides.splice(index, 1);
+        } else {
+            siteMedia[field] = '';
+        }
+        
+        saveSiteMedia(function() {
+            renderSiteMediaPreviews();
+        });
+    });
+    
+    // Save site media to database
+    function saveSiteMedia(callback) {
+        $.ajax({
+            url: shoppatonData.ajaxUrl,
+            type: 'POST',
+            data: {
+                action: 'shoppaton_save_site_media',
+                nonce: shoppatonData.nonce,
+                media: JSON.stringify(siteMedia)
+            },
+            success: function(response) {
+                if (response.success) {
+                    if (typeof Shoppaton !== 'undefined' && Shoppaton.toast) {
+                        Shoppaton.toast('Media saved successfully!', 'success');
+                    } else {
+                        console.log('Media saved successfully');
+                    }
+                    if (callback) callback();
+                } else {
+                    alert('Error saving media: ' + (response.data || 'Unknown error'));
+                }
+            },
+            error: function() {
+                alert('Error saving media. Please try again.');
+            }
+        });
+    }
+    
+    // Load site media on media tab
+    if ($('.shoppaton-admin-media').length) {
+        loadSiteMedia();
+    }
+    
+    // Category image upload using WordPress media
+    $(document).on('click', '#category-image-upload', function(e) {
+        e.preventDefault();
+        
+        if (typeof wp !== 'undefined' && wp.media) {
+            var mediaUploader = wp.media({
+                title: 'Select Category Image',
+                button: {
+                    text: 'Use This Image'
+                },
+                multiple: false
+            });
+            
+            mediaUploader.on('select', function() {
+                var attachment = mediaUploader.state().get('selection').first().toJSON();
+                $('#category-image-url').val(attachment.url);
+                $('#category-image-preview').html('<img src="' + attachment.url + '" style="width: 100%; height: 100%; object-fit: cover;">');
+            });
+            
+            mediaUploader.open();
+        }
+    });
 });
 </script>
 

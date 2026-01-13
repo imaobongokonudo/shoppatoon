@@ -11,6 +11,9 @@ if (!defined('ABSPATH')) {
 
 global $wpdb;
 $sliders = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}shoppaton_sliders WHERE status = 'active' ORDER BY sort_order ASC");
+
+// Also check for hero slides from Media management
+$hero_slides_from_options = get_option('shoppaton_hero_slides', array());
 ?>
 <style>
 /* Hero Section - Side by Side Layout */
@@ -206,19 +209,28 @@ $sliders = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}shoppaton_sliders WH
                         <img src="<?php echo esc_url($slide->image); ?>" alt="<?php echo esc_attr($slide->title); ?>">
                     </div>
                     <?php endforeach; ?>
+                <?php elseif (!empty($hero_slides_from_options)) : ?>
+                    <?php foreach ($hero_slides_from_options as $index => $slide_url) : ?>
+                    <div class="shoppaton-hero-slide <?php echo $index === 0 ? 'active' : ''; ?>">
+                        <img src="<?php echo esc_url($slide_url); ?>" alt="Hero Slide <?php echo $index + 1; ?>">
+                    </div>
+                    <?php endforeach; ?>
                 <?php else : ?>
                     <div class="shoppaton-hero-slide active">
                         <div class="shoppaton-image-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(20,20,20,0.8);">
-                            <span style="color: rgba(255,255,255,0.5); text-align: center;">Hero Image Placeholder<br><small>Upload in Admin > Sliders</small></span>
+                            <span style="color: rgba(255,255,255,0.5); text-align: center;">Hero Image Placeholder<br><small>Upload in Admin > Media</small></span>
                         </div>
                     </div>
                 <?php endif; ?>
             </div>
-            <?php if (!empty($sliders) && count($sliders) > 1) : ?>
+            <?php 
+            $total_slides = !empty($sliders) ? count($sliders) : (!empty($hero_slides_from_options) ? count($hero_slides_from_options) : 0);
+            if ($total_slides > 1) : 
+            ?>
             <div class="shoppaton-hero-dots">
-                <?php foreach ($sliders as $index => $slide) : ?>
-                <button class="shoppaton-hero-dot <?php echo $index === 0 ? 'active' : ''; ?>" data-slide="<?php echo $index; ?>"></button>
-                <?php endforeach; ?>
+                <?php for ($i = 0; $i < $total_slides; $i++) : ?>
+                <button class="shoppaton-hero-dot <?php echo $i === 0 ? 'active' : ''; ?>" data-slide="<?php echo $i; ?>"></button>
+                <?php endfor; ?>
             </div>
             <?php endif; ?>
         </div>

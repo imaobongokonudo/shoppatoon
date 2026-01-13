@@ -19,6 +19,10 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
 global $wpdb;
 $categories_table = $wpdb->prefix . 'shoppaton_categories';
 $categories = $wpdb->get_results("SELECT * FROM {$categories_table} ORDER BY name ASC LIMIT 6");
+
+// Get site media from options
+$about_image = get_option('shoppaton_about_image', '');
+$site_logo = get_option('shoppaton_logo', '');
 ?>
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/header.php'; ?>
@@ -36,9 +40,13 @@ $categories = $wpdb->get_results("SELECT * FROM {$categories_table} ORDER BY nam
         
         <!-- Image placed directly under heading -->
         <div class="shoppaton-about-image-container shoppaton-animate animate-on-scroll shoppaton-fade-in-up" style="max-width: 600px; margin: 0 auto 40px; padding: 0 10px;">
+            <?php if (!empty($about_image)) : ?>
+            <img src="<?php echo esc_url($about_image); ?>" alt="About Shoppaton" style="width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: var(--border-radius-lg);">
+            <?php else : ?>
             <div class="shoppaton-image-placeholder" style="aspect-ratio: 16/10; max-width: 100%; border-radius: var(--border-radius-lg);">
-                <span>About Us Image<br>Upload in Admin</span>
+                <span>About Us Image<br>Upload in Admin > Media</span>
             </div>
+            <?php endif; ?>
         </div>
         
         <!-- Content below image -->

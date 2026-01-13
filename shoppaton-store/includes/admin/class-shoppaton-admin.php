@@ -67,6 +67,10 @@ class Shoppaton_Admin {
         add_action('wp_ajax_shoppaton_get_category', array($this, 'get_category_frontend'));
         add_action('wp_ajax_shoppaton_save_category', array($this, 'save_category_frontend'));
         add_action('wp_ajax_shoppaton_delete_category', array($this, 'delete_category_frontend'));
+        
+        // Site media AJAX handlers for frontend
+        add_action('wp_ajax_shoppaton_get_site_media', array($this, 'get_site_media_frontend'));
+        add_action('wp_ajax_shoppaton_save_site_media', array($this, 'save_site_media_frontend'));
     }
 
     /**
@@ -1947,5 +1951,54 @@ class Shoppaton_Admin {
         } else {
             wp_send_json_error('Failed to delete category');
         }
+    }
+    
+    /**
+     * Get site media (frontend)
+     */
+    public function get_site_media_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+        
+        $media = array(
+            'hero_slides' => get_option('shoppaton_hero_slides', array()),
+            'about_image' => get_option('shoppaton_about_image', ''),
+            'logo' => get_option('shoppaton_logo', '')
+        );
+        
+        wp_send_json_success($media);
+    }
+    
+    /**
+     * Save site media (frontend)
+     */
+    public function save_site_media_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+        
+        $media = json_decode(stripslashes($_POST['media']), true);
+        
+        if (!$media) {
+            wp_send_json_error('Invalid media data');
+        }
+        
+        // Save each media field
+        if (isset($media['hero_slides'])) {
+            update_option('shoppaton_hero_slides', $media['hero_slides']);
+        }
+        if (isset($media['about_image'])) {
+            update_option('shoppaton_about_image', $media['about_image']);
+        }
+        if (isset($media['logo'])) {
+            update_option('shoppaton_logo', $media['logo']);
+        }
+        
+        wp_send_json_success(array('message' => 'Media saved successfully'));
     }
 }
