@@ -195,10 +195,12 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
         
         <form class="shoppaton-contact-form" id="track-order-form" style="max-width: 500px;">
             <div class="shoppaton-form-group">
-                <input type="text" name="order_number" class="shoppaton-form-input" placeholder="Order Number (e.g., SHP20240112XXXXX)" required>
+                <label class="shoppaton-form-label" style="color: var(--shoppaton-gold);">Order Number *</label>
+                <input type="text" name="order_number" class="shoppaton-form-input" placeholder="e.g., SHP20240112XXXXX" required>
             </div>
             <div class="shoppaton-form-group">
-                <input type="text" name="identifier" class="shoppaton-form-input" placeholder="Email or Phone Number" required>
+                <label class="shoppaton-form-label" style="color: var(--shoppaton-gold);">Email or Phone Number *</label>
+                <input type="text" name="identifier" class="shoppaton-form-input" placeholder="Email or phone used for order" required>
             </div>
             <button type="submit" class="shoppaton-btn shoppaton-btn-primary" style="width: 100%;">
                 Track Order

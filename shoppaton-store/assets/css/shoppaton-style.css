@@ -352,7 +352,7 @@ body.shoppaton-has-header {
 }
 
 .shoppaton-logo img {
-    height: 40px;
+    height: 48px;
     width: auto;
     filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
 }
@@ -452,9 +452,9 @@ body.shoppaton-has-header {
     gap: 5px;
     cursor: pointer;
     padding: 10px;
-    background: var(--shoppaton-glass);
+    background: transparent;
     border-radius: var(--border-radius);
-    border: 1px solid var(--shoppaton-glass-border);
+    border: none;
 }
 
 .shoppaton-hamburger span {
@@ -781,10 +781,12 @@ body.shoppaton-has-header {
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     align-items: center;
+    padding: 0 20px;
 }
 
 .shoppaton-about-image {
     position: relative;
+    padding: 20px;
 }
 
 .shoppaton-about-image img {
@@ -999,7 +1001,7 @@ body.shoppaton-has-header {
 }
 
 .shoppaton-footer-logo img {
-    height: 90px;
+    height: 60px;
     margin-bottom: 20px;
     filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.5));
 }
@@ -1216,23 +1218,23 @@ body.shoppaton-has-header {
 }
 
 .shoppaton-whatsapp-btn {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     background: #25D366;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 22px;
+    font-size: 18px;
     box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
     transition: var(--transition-normal);
     animation: pulse 2s infinite;
 }
 
 .shoppaton-whatsapp-btn svg {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
 }
 
 .shoppaton-whatsapp-btn:hover {
@@ -1249,17 +1251,17 @@ body.shoppaton-has-header {
     }
 }
 
-/* Scroll to Top - Smaller Single Circle */
+/* Scroll to Top - Smaller Single Circle with Gold Arrow */
 .shoppaton-scroll-top {
     position: fixed;
     bottom: 100px;
     left: 15px;
     z-index: 999;
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: rgba(10, 10, 10, 0.9);
-    border: none;
+    border: 2px solid var(--shoppaton-gold);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1267,6 +1269,7 @@ body.shoppaton-has-header {
     opacity: 0;
     visibility: hidden;
     transition: var(--transition-normal);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
 
 .shoppaton-scroll-top.visible {
@@ -1298,6 +1301,8 @@ body.shoppaton-has-header {
     color: var(--shoppaton-gold);
     z-index: 1;
     transition: var(--transition-fast);
+    width: 14px;
+    height: 14px;
 }
 
 /* Cart Page */

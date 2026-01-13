@@ -144,13 +144,14 @@ if (!defined('ABSPATH')) {
         </div>
 
         <!-- Help Section -->
-        <div style="text-align: center; margin-top: 60px;">
+        <div style="text-align: center; margin-top: 60px; padding-bottom: 80px;">
             <h3 style="margin-bottom: 15px;">Need Help With Your Order?</h3>
             <p style="color: var(--shoppaton-text-muted); margin-bottom: 30px;">
                 If you have any questions or concerns about your order, please don't hesitate to contact us.
             </p>
             <a href="<?php echo esc_url(Shoppaton_Settings::instance()->get_whatsapp_link('Hello, I need help with my order.')); ?>" target="_blank" class="shoppaton-btn shoppaton-btn-primary">
-                💬 Contact Support
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                Contact Support
             </a>
         </div>
     </div>
