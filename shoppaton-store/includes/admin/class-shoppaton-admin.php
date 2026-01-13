@@ -38,14 +38,28 @@ class Shoppaton_Admin {
      */
     private function __construct() {
         add_action('admin_menu', array($this, 'add_admin_menu'));
-        add_action('wp_ajax_shoppaton_admin_save_product', array($this, 'save_product'));
-        add_action('wp_ajax_shoppaton_admin_delete_product', array($this, 'delete_product'));
-        add_action('wp_ajax_shoppaton_admin_save_settings', array($this, 'save_settings'));
+        
+        // Backend admin AJAX handlers (use admin nonce)
+        add_action('wp_ajax_shoppaton_admin_save_product', array($this, 'save_product_backend'));
+        add_action('wp_ajax_shoppaton_admin_delete_product', array($this, 'delete_product_backend'));
+        add_action('wp_ajax_shoppaton_admin_save_settings', array($this, 'save_settings_backend'));
         add_action('wp_ajax_shoppaton_admin_save_slider', array($this, 'save_slider'));
         add_action('wp_ajax_shoppaton_admin_delete_slider', array($this, 'delete_slider'));
         add_action('wp_ajax_shoppaton_admin_update_order', array($this, 'update_order'));
         add_action('wp_ajax_shoppaton_admin_save_category', array($this, 'save_category'));
         add_action('wp_ajax_shoppaton_admin_delete_category', array($this, 'delete_category'));
+        
+        // Frontend admin dashboard AJAX handlers (use frontend nonce)
+        add_action('wp_ajax_shoppaton_admin_get_stats', array($this, 'get_stats_frontend'));
+        add_action('wp_ajax_shoppaton_admin_get_products', array($this, 'get_products_frontend'));
+        add_action('wp_ajax_shoppaton_admin_get_orders', array($this, 'get_orders_frontend'));
+        add_action('wp_ajax_shoppaton_admin_get_customers', array($this, 'get_customers_frontend'));
+        add_action('wp_ajax_shoppaton_admin_get_analytics', array($this, 'get_analytics_frontend'));
+        add_action('wp_ajax_shoppaton_admin_save_product', array($this, 'save_product_frontend'));
+        add_action('wp_ajax_shoppaton_admin_save_settings', array($this, 'save_settings_frontend'));
+        add_action('wp_ajax_shoppaton_admin_get_product', array($this, 'get_product_frontend'));
+        add_action('wp_ajax_shoppaton_admin_update_order_status', array($this, 'update_order_status_frontend'));
+        add_action('wp_ajax_shoppaton_admin_update_tracking', array($this, 'update_tracking_frontend'));
     }
 
     /**
@@ -1103,6 +1117,677 @@ class Shoppaton_Admin {
             wp_send_json_success(array('message' => 'Category deleted'));
         } else {
             wp_send_json_error(array('message' => 'Failed to delete category'));
+        }
+    }
+
+    // ================================
+    // Frontend Admin Dashboard Methods
+    // ================================
+
+    /**
+     * Get stats for frontend dashboard
+     */
+    public function get_stats_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        global $wpdb;
+        $products_table = $wpdb->prefix . 'shoppaton_products';
+        $orders_table = $wpdb->prefix . 'shoppaton_orders';
+
+        // Today's sales
+        $today = date('Y-m-d');
+        $today_sales = $wpdb->get_var($wpdb->prepare(
+            "SELECT COALESCE(SUM(total), 0) FROM {$orders_table} WHERE DATE(created_at) = %s AND payment_status = 'paid'",
+            $today
+        ));
+
+        // Pending orders
+        $pending_orders = $wpdb->get_var(
+            "SELECT COUNT(*) FROM {$orders_table} WHERE status = 'pending'"
+        );
+
+        // Total products
+        $total_products = $wpdb->get_var(
+            "SELECT COUNT(*) FROM {$products_table} WHERE status = 'publish'"
+        );
+
+        // Total customers (unique emails in orders)
+        $total_customers = $wpdb->get_var(
+            "SELECT COUNT(DISTINCT billing_email) FROM {$orders_table}"
+        );
+
+        // Sales data for chart (last 7 days)
+        $sales_data = array(
+            'labels' => array(),
+            'values' => array()
+        );
+        for ($i = 6; $i >= 0; $i--) {
+            $date = date('Y-m-d', strtotime("-{$i} days"));
+            $sales_data['labels'][] = date('M j', strtotime($date));
+            $sales = $wpdb->get_var($wpdb->prepare(
+                "SELECT COALESCE(SUM(total), 0) FROM {$orders_table} WHERE DATE(created_at) = %s AND payment_status = 'paid'",
+                $date
+            ));
+            $sales_data['values'][] = floatval($sales);
+        }
+
+        // Top products
+        $top_products = $wpdb->get_results(
+            "SELECT p.id, p.name, p.images, COUNT(oi.id) as sales
+             FROM {$wpdb->prefix}shoppaton_order_items oi
+             JOIN {$products_table} p ON oi.product_id = p.id
+             GROUP BY p.id
+             ORDER BY sales DESC
+             LIMIT 5"
+        );
+
+        $top_products_formatted = array();
+        foreach ($top_products as $product) {
+            $images = maybe_unserialize($product->images);
+            $top_products_formatted[] = array(
+                'id' => $product->id,
+                'name' => $product->name,
+                'image' => !empty($images) ? $images[0] : SHOPPATON_ASSETS_URL . 'images/placeholder-product.png',
+                'sales' => $product->sales
+            );
+        }
+
+        // Recent orders
+        $recent_orders = $wpdb->get_results(
+            "SELECT id, order_number, billing_name as customer_name, total, status, created_at
+             FROM {$orders_table}
+             ORDER BY created_at DESC
+             LIMIT 5"
+        );
+
+        $recent_orders_formatted = array();
+        foreach ($recent_orders as $order) {
+            $recent_orders_formatted[] = array(
+                'id' => $order->id,
+                'order_number' => $order->order_number,
+                'customer_name' => $order->customer_name,
+                'total' => floatval($order->total),
+                'status' => $order->status
+            );
+        }
+
+        wp_send_json_success(array(
+            'today_sales' => floatval($today_sales),
+            'pending_orders' => intval($pending_orders),
+            'total_products' => intval($total_products),
+            'total_customers' => intval($total_customers),
+            'sales_data' => $sales_data,
+            'top_products' => $top_products_formatted,
+            'recent_orders' => $recent_orders_formatted
+        ));
+    }
+
+    /**
+     * Get products for frontend dashboard
+     */
+    public function get_products_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'shoppaton_products';
+        $page = intval($_POST['page'] ?? 1);
+        $per_page = 10;
+        $offset = ($page - 1) * $per_page;
+
+        $search = sanitize_text_field($_POST['search'] ?? '');
+        $category = sanitize_text_field($_POST['category'] ?? '');
+        $status = sanitize_text_field($_POST['status'] ?? '');
+
+        $where = "WHERE 1=1";
+        if ($search) {
+            $where .= $wpdb->prepare(" AND name LIKE %s", '%' . $wpdb->esc_like($search) . '%');
+        }
+        if ($category) {
+            $where .= $wpdb->prepare(" AND category_id = %d", $category);
+        }
+        if ($status) {
+            $where .= $wpdb->prepare(" AND status = %s", $status === 'active' ? 'publish' : 'draft');
+        }
+
+        $total = $wpdb->get_var("SELECT COUNT(*) FROM {$table} {$where}");
+        $products = $wpdb->get_results(
+            "SELECT * FROM {$table} {$where} ORDER BY created_at DESC LIMIT {$per_page} OFFSET {$offset}"
+        );
+
+        $products_formatted = array();
+        foreach ($products as $product) {
+            $images = maybe_unserialize($product->images);
+            $products_formatted[] = array(
+                'id' => $product->id,
+                'name' => $product->name,
+                'image' => !empty($images) ? $images[0] : SHOPPATON_ASSETS_URL . 'images/placeholder-product.png',
+                'category' => $product->category_id ? 'Category' : '-',
+                'price' => floatval($product->sale_price ?: $product->price),
+                'stock' => $product->stock_quantity,
+                'status' => $product->status === 'publish' ? 'active' : 'inactive'
+            );
+        }
+
+        wp_send_json_success(array(
+            'products' => $products_formatted,
+            'pages' => ceil($total / $per_page),
+            'total' => $total
+        ));
+    }
+
+    /**
+     * Get orders for frontend dashboard
+     */
+    public function get_orders_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'shoppaton_orders';
+        $page = intval($_POST['page'] ?? 1);
+        $per_page = 10;
+        $offset = ($page - 1) * $per_page;
+
+        $search = sanitize_text_field($_POST['search'] ?? '');
+        $status = sanitize_text_field($_POST['status'] ?? '');
+        $date = sanitize_text_field($_POST['date'] ?? '');
+
+        $where = "WHERE 1=1";
+        if ($search) {
+            $where .= $wpdb->prepare(" AND (order_number LIKE %s OR billing_name LIKE %s)", 
+                '%' . $wpdb->esc_like($search) . '%',
+                '%' . $wpdb->esc_like($search) . '%'
+            );
+        }
+        if ($status) {
+            $where .= $wpdb->prepare(" AND status = %s", $status);
+        }
+        if ($date) {
+            $where .= $wpdb->prepare(" AND DATE(created_at) = %s", $date);
+        }
+
+        $total = $wpdb->get_var("SELECT COUNT(*) FROM {$table} {$where}");
+        $orders = $wpdb->get_results(
+            "SELECT * FROM {$table} {$where} ORDER BY created_at DESC LIMIT {$per_page} OFFSET {$offset}"
+        );
+
+        $orders_formatted = array();
+        foreach ($orders as $order) {
+            $items_count = $wpdb->get_var($wpdb->prepare(
+                "SELECT COUNT(*) FROM {$wpdb->prefix}shoppaton_order_items WHERE order_id = %d",
+                $order->id
+            ));
+            $orders_formatted[] = array(
+                'id' => $order->id,
+                'order_number' => $order->order_number,
+                'customer_name' => $order->billing_name,
+                'date' => date('M j, Y', strtotime($order->created_at)),
+                'items_count' => $items_count,
+                'total' => floatval($order->total),
+                'status' => $order->status
+            );
+        }
+
+        wp_send_json_success(array(
+            'orders' => $orders_formatted,
+            'pages' => ceil($total / $per_page),
+            'total' => $total
+        ));
+    }
+
+    /**
+     * Get customers for frontend dashboard
+     */
+    public function get_customers_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'shoppaton_orders';
+        $page = intval($_POST['page'] ?? 1);
+        $per_page = 10;
+        $offset = ($page - 1) * $per_page;
+
+        $search = sanitize_text_field($_POST['search'] ?? '');
+
+        $where = "";
+        if ($search) {
+            $where = $wpdb->prepare(" HAVING name LIKE %s OR email LIKE %s", 
+                '%' . $wpdb->esc_like($search) . '%',
+                '%' . $wpdb->esc_like($search) . '%'
+            );
+        }
+
+        $customers = $wpdb->get_results(
+            "SELECT billing_name as name, billing_email as email, billing_phone as phone,
+                    COUNT(*) as orders_count, SUM(total) as total_spent, MIN(created_at) as joined
+             FROM {$table}
+             GROUP BY billing_email
+             {$where}
+             ORDER BY total_spent DESC
+             LIMIT {$per_page} OFFSET {$offset}"
+        );
+
+        $total = $wpdb->get_var(
+            "SELECT COUNT(DISTINCT billing_email) FROM {$table}"
+        );
+
+        $customers_formatted = array();
+        foreach ($customers as $customer) {
+            $customers_formatted[] = array(
+                'name' => $customer->name,
+                'email' => $customer->email,
+                'phone' => $customer->phone,
+                'orders_count' => $customer->orders_count,
+                'total_spent' => floatval($customer->total_spent),
+                'joined' => date('M j, Y', strtotime($customer->joined))
+            );
+        }
+
+        wp_send_json_success(array(
+            'customers' => $customers_formatted,
+            'pages' => ceil($total / $per_page),
+            'total' => $total
+        ));
+    }
+
+    /**
+     * Get analytics for frontend dashboard
+     */
+    public function get_analytics_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        global $wpdb;
+        $orders_table = $wpdb->prefix . 'shoppaton_orders';
+        $analytics_table = $wpdb->prefix . 'shoppaton_analytics';
+
+        $start_date = sanitize_text_field($_POST['start_date'] ?? date('Y-m-d', strtotime('-30 days')));
+        $end_date = sanitize_text_field($_POST['end_date'] ?? date('Y-m-d'));
+
+        // Revenue
+        $revenue = $wpdb->get_var($wpdb->prepare(
+            "SELECT COALESCE(SUM(total), 0) FROM {$orders_table} 
+             WHERE created_at BETWEEN %s AND %s AND payment_status = 'paid'",
+            $start_date, $end_date . ' 23:59:59'
+        ));
+
+        // Orders count
+        $orders = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$orders_table} 
+             WHERE created_at BETWEEN %s AND %s",
+            $start_date, $end_date . ' 23:59:59'
+        ));
+
+        // AOV
+        $aov = $orders > 0 ? $revenue / $orders : 0;
+
+        // Conversion (page views to orders)
+        $page_views = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$analytics_table} 
+             WHERE event_type = 'page_view' AND created_at BETWEEN %s AND %s",
+            $start_date, $end_date . ' 23:59:59'
+        )) ?: 1;
+        $conversion = round(($orders / $page_views) * 100, 2);
+
+        // Revenue data for chart
+        $revenue_data = array('labels' => array(), 'values' => array());
+        $current = strtotime($start_date);
+        $end = strtotime($end_date);
+        while ($current <= $end) {
+            $date = date('Y-m-d', $current);
+            $revenue_data['labels'][] = date('M j', $current);
+            $daily_revenue = $wpdb->get_var($wpdb->prepare(
+                "SELECT COALESCE(SUM(total), 0) FROM {$orders_table} 
+                 WHERE DATE(created_at) = %s AND payment_status = 'paid'",
+                $date
+            ));
+            $revenue_data['values'][] = floatval($daily_revenue);
+            $current = strtotime('+1 day', $current);
+        }
+
+        // Orders by status
+        $statuses = $wpdb->get_results($wpdb->prepare(
+            "SELECT status, COUNT(*) as count FROM {$orders_table} 
+             WHERE created_at BETWEEN %s AND %s
+             GROUP BY status",
+            $start_date, $end_date . ' 23:59:59'
+        ));
+        $orders_by_status = array('labels' => array(), 'values' => array());
+        foreach ($statuses as $s) {
+            $orders_by_status['labels'][] = ucfirst($s->status);
+            $orders_by_status['values'][] = intval($s->count);
+        }
+
+        // Behavior metrics
+        $cart_adds = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$analytics_table} 
+             WHERE event_type = 'add_to_cart' AND created_at BETWEEN %s AND %s",
+            $start_date, $end_date . ' 23:59:59'
+        )) ?: 0;
+        $abandonment_rate = $cart_adds > 0 ? round((1 - ($orders / $cart_adds)) * 100, 1) : 0;
+
+        wp_send_json_success(array(
+            'revenue' => floatval($revenue),
+            'orders' => intval($orders),
+            'aov' => floatval($aov),
+            'conversion' => $conversion,
+            'abandonment_rate' => $abandonment_rate,
+            'returning_customers' => 0,
+            'avg_duration' => '0m',
+            'avg_pageviews' => 0,
+            'revenue_data' => $revenue_data,
+            'orders_by_status' => $orders_by_status
+        ));
+    }
+
+    /**
+     * Save product from frontend dashboard
+     */
+    public function save_product_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        // Parse the serialized product data
+        parse_str($_POST['product'] ?? '', $product_data);
+
+        $product_id = intval($product_data['product_id'] ?? 0);
+        
+        $data = array(
+            'name' => sanitize_text_field($product_data['name'] ?? ''),
+            'description' => wp_kses_post($product_data['description'] ?? ''),
+            'price' => floatval($product_data['price'] ?? 0),
+            'sale_price' => !empty($product_data['compare_price']) ? floatval($product_data['compare_price']) : null,
+            'stock_quantity' => intval($product_data['stock'] ?? 0),
+            'stock_status' => intval($product_data['stock'] ?? 0) > 0 ? 'instock' : 'outofstock',
+            'category_id' => intval($product_data['category'] ?? 0) ?: null,
+            'skin_type' => sanitize_text_field($product_data['skin_type'] ?? ''),
+            'target_user' => sanitize_text_field($product_data['target_user'] ?? ''),
+            'status' => ($product_data['status'] ?? 'active') === 'active' ? 'publish' : 'draft',
+        );
+
+        // Validate required fields
+        if (empty($data['name'])) {
+            wp_send_json_error(array('message' => 'Product name is required'));
+        }
+        if ($data['price'] <= 0) {
+            wp_send_json_error(array('message' => 'Product price must be greater than 0'));
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'shoppaton_products';
+
+        if ($product_id) {
+            $data['updated_at'] = current_time('mysql');
+            $result = $wpdb->update($table, $data, array('id' => $product_id));
+        } else {
+            $data['created_at'] = current_time('mysql');
+            $data['updated_at'] = current_time('mysql');
+            $data['slug'] = sanitize_title($data['name']);
+            $result = $wpdb->insert($table, $data);
+        }
+
+        if ($result !== false) {
+            wp_send_json_success(array('message' => 'Product saved successfully'));
+        } else {
+            wp_send_json_error(array('message' => 'Database error: ' . $wpdb->last_error));
+        }
+    }
+
+    /**
+     * Save settings from frontend dashboard
+     */
+    public function save_settings_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        parse_str($_POST['settings'] ?? '', $settings_data);
+
+        $settings = Shoppaton_Settings::instance();
+        $fields = array(
+            'paystack_test_public', 'paystack_test_secret',
+            'paystack_live_public', 'paystack_live_secret', 'paystack_live_mode',
+            'delivery_company', 'delivery_api_key',
+            'whatsapp_number', 'contact_email', 
+            'instagram_url', 'facebook_url', 'tiktok_url'
+        );
+
+        foreach ($fields as $field) {
+            if (isset($settings_data[$field])) {
+                $value = sanitize_text_field($settings_data[$field]);
+                $settings->update($field, $value);
+            }
+        }
+
+        wp_send_json_success(array('message' => 'Settings saved successfully'));
+    }
+
+    /**
+     * Get single product for frontend dashboard
+     */
+    public function get_product_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        $product_id = intval($_POST['product_id'] ?? 0);
+        if (!$product_id) {
+            wp_send_json_error(array('message' => 'Invalid product ID'));
+        }
+
+        $product = Shoppaton_Products::instance()->get($product_id);
+        if (!$product) {
+            wp_send_json_error(array('message' => 'Product not found'));
+        }
+
+        $images = maybe_unserialize($product->images);
+        $images_formatted = array();
+        if (!empty($images)) {
+            foreach ($images as $image) {
+                $images_formatted[] = array(
+                    'id' => 0,
+                    'url' => $image,
+                    'thumbnail' => $image
+                );
+            }
+        }
+
+        wp_send_json_success(array(
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $product->sale_price ?: $product->price,
+            'compare_price' => $product->sale_price ? $product->price : '',
+            'category' => $product->category_id,
+            'stock' => $product->stock_quantity,
+            'description' => $product->description,
+            'skin_type' => $product->skin_type,
+            'target_user' => $product->target_user,
+            'status' => $product->status === 'publish' ? 'active' : 'inactive',
+            'images' => $images_formatted
+        ));
+    }
+
+    /**
+     * Update order status from frontend dashboard
+     */
+    public function update_order_status_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        $order_id = intval($_POST['order_id'] ?? 0);
+        $status = sanitize_text_field($_POST['status'] ?? '');
+
+        if (!$order_id || !$status) {
+            wp_send_json_error(array('message' => 'Invalid request'));
+        }
+
+        if (Shoppaton_Orders::instance()->update($order_id, array('status' => $status))) {
+            wp_send_json_success(array('message' => 'Order status updated'));
+        } else {
+            wp_send_json_error(array('message' => 'Failed to update order'));
+        }
+    }
+
+    /**
+     * Update tracking info from frontend dashboard
+     */
+    public function update_tracking_frontend() {
+        check_ajax_referer('shoppaton_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        $order_id = intval($_POST['order_id'] ?? 0);
+        $delivery_company = sanitize_text_field($_POST['delivery_company'] ?? '');
+        $tracking_number = sanitize_text_field($_POST['tracking_number'] ?? '');
+
+        if (!$order_id) {
+            wp_send_json_error(array('message' => 'Invalid order ID'));
+        }
+
+        global $wpdb;
+        $result = $wpdb->update(
+            $wpdb->prefix . 'shoppaton_orders',
+            array(
+                'delivery_company' => $delivery_company,
+                'tracking_number' => $tracking_number
+            ),
+            array('id' => $order_id)
+        );
+
+        if ($result !== false) {
+            wp_send_json_success(array('message' => 'Tracking info saved'));
+        } else {
+            wp_send_json_error(array('message' => 'Failed to save tracking info'));
+        }
+    }
+
+    /**
+     * Save product (backend)
+     */
+    public function save_product_backend() {
+        check_ajax_referer('shoppaton_admin_nonce', 'nonce');
+        $this->save_product_common();
+    }
+
+    /**
+     * Delete product (backend)
+     */
+    public function delete_product_backend() {
+        check_ajax_referer('shoppaton_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        $product_id = intval($_POST['product_id'] ?? 0);
+
+        if (Shoppaton_Products::instance()->delete($product_id)) {
+            wp_send_json_success(array('message' => 'Product deleted'));
+        } else {
+            wp_send_json_error(array('message' => 'Failed to delete product'));
+        }
+    }
+
+    /**
+     * Save settings (backend)
+     */
+    public function save_settings_backend() {
+        check_ajax_referer('shoppaton_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        $settings = Shoppaton_Settings::instance();
+        $fields = array(
+            'paystack_mode', 'paystack_test_public', 'paystack_test_secret',
+            'paystack_live_public', 'paystack_live_secret', 'whatsapp_number',
+            'contact_email', 'instagram', 'facebook', 'tiktok',
+            'abandoned_cart_enabled', 'abandoned_cart_interval'
+        );
+
+        foreach ($fields as $field) {
+            if (isset($_POST[$field])) {
+                $value = sanitize_text_field($_POST[$field]);
+                if ($field === 'abandoned_cart_enabled') {
+                    $value = (bool) $value;
+                }
+                $settings->update($field, $value);
+            }
+        }
+
+        wp_send_json_success(array('message' => 'Settings saved'));
+    }
+
+    /**
+     * Common save product logic
+     */
+    private function save_product_common() {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+        }
+
+        $product_id = intval($_POST['product_id'] ?? 0);
+        
+        $data = array(
+            'name' => sanitize_text_field($_POST['name'] ?? ''),
+            'description' => wp_kses_post($_POST['description'] ?? ''),
+            'short_description' => sanitize_textarea_field($_POST['short_description'] ?? ''),
+            'price' => floatval($_POST['price'] ?? 0),
+            'sale_price' => $_POST['sale_price'] ? floatval($_POST['sale_price']) : null,
+            'sku' => sanitize_text_field($_POST['sku'] ?? ''),
+            'stock_quantity' => intval($_POST['stock_quantity'] ?? 0),
+            'stock_status' => sanitize_text_field($_POST['stock_status'] ?? 'instock'),
+            'category_id' => intval($_POST['category_id'] ?? 0) ?: null,
+            'images' => array_map('esc_url_raw', $_POST['images'] ?? array()),
+            'skin_type' => sanitize_text_field($_POST['skin_type'] ?? ''),
+            'target_user' => sanitize_text_field($_POST['target_user'] ?? ''),
+            'usage_guide' => wp_kses_post($_POST['usage_guide'] ?? ''),
+            'featured' => isset($_POST['featured']) ? 1 : 0,
+            'best_seller' => isset($_POST['best_seller']) ? 1 : 0,
+            'status' => sanitize_text_field($_POST['status'] ?? 'publish'),
+        );
+
+        if ($product_id) {
+            $result = Shoppaton_Products::instance()->update($product_id, $data);
+        } else {
+            $result = Shoppaton_Products::instance()->create($data);
+        }
+
+        if ($result) {
+            wp_send_json_success(array('message' => 'Product saved successfully'));
+        } else {
+            wp_send_json_error(array('message' => 'Failed to save product'));
         }
     }
 }

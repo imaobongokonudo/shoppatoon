@@ -26,45 +26,107 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/header.php'; ?>
 
-<div class="shoppaton-admin-page" style="padding-top: 120px; min-height: 100vh;">
+<style>
+/* Admin Dashboard Specific Styles */
+.shoppaton-admin-page {
+    padding: 80px 15px 40px !important;
+}
+.shoppaton-admin-page h1, .shoppaton-admin-page h2, .shoppaton-admin-page h3 {
+    font-size: 18px !important;
+    margin-bottom: 15px;
+}
+.shoppaton-admin-page h1 {
+    font-size: 22px !important;
+}
+.shoppaton-admin-page p, .shoppaton-admin-page label, .shoppaton-admin-page td, .shoppaton-admin-page th {
+    font-size: 12px !important;
+}
+.shoppaton-admin-page .shoppaton-form-input,
+.shoppaton-admin-page .shoppaton-form-select,
+.shoppaton-admin-page .shoppaton-form-textarea {
+    font-size: 12px !important;
+    padding: 10px 12px !important;
+    color: #fff !important;
+    background: rgba(255,255,255,0.08) !important;
+}
+.shoppaton-admin-page .shoppaton-form-input::placeholder,
+.shoppaton-admin-page .shoppaton-form-textarea::placeholder {
+    color: var(--shoppaton-gold) !important;
+    opacity: 0.8 !important;
+}
+.shoppaton-admin-page .shoppaton-form-label {
+    font-size: 11px !important;
+    margin-bottom: 6px !important;
+    color: var(--shoppaton-gold) !important;
+}
+.shoppaton-admin-page .shoppaton-btn {
+    font-size: 11px !important;
+    padding: 8px 16px !important;
+}
+.shoppaton-admin-page .shoppaton-glass-card {
+    padding: 20px !important;
+}
+.shoppaton-admin-page .shoppaton-admin-nav-item {
+    font-size: 12px !important;
+    padding: 10px 12px !important;
+}
+.shoppaton-admin-page .shoppaton-container {
+    max-width: 1200px;
+    padding: 0 15px;
+}
+.shoppaton-admin-page select option {
+    color: #000 !important;
+    background: #fff !important;
+}
+@media (max-width: 768px) {
+    .shoppaton-admin-page {
+        padding: 70px 10px 30px !important;
+    }
+    .shoppaton-admin-page h1 {
+        font-size: 18px !important;
+    }
+}
+</style>
+
+<div class="shoppaton-admin-page">
     <div class="shoppaton-container">
         <!-- Admin Header -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
             <div>
                 <h1 style="margin-bottom: 5px;">Admin Dashboard</h1>
                 <p style="color: var(--shoppaton-text-muted); margin: 0;">Manage your Shoppaton Store</p>
             </div>
             <a href="<?php echo esc_url(admin_url('admin.php?page=shoppaton-settings')); ?>" class="shoppaton-btn shoppaton-btn-secondary">
-                ⚙️ WordPress Admin
+                WP Admin
             </a>
         </div>
 
         <!-- Admin Layout -->
-        <div class="shoppaton-admin-layout" style="display: grid; grid-template-columns: 220px 1fr; gap: 30px;">
+        <div class="shoppaton-admin-layout" style="display: grid; grid-template-columns: 180px 1fr; gap: 20px;">
             <!-- Sidebar -->
             <div class="shoppaton-admin-sidebar">
-                <div class="shoppaton-glass-card" style="padding: 20px;">
+                <div class="shoppaton-glass-card" style="padding: 15px;">
                     <nav class="shoppaton-admin-nav">
                         <a href="?tab=dashboard" class="shoppaton-admin-nav-item <?php echo $active_tab === 'dashboard' ? 'active' : ''; ?>">
-                            📊 Dashboard
+                            Dashboard
                         </a>
                         <a href="?tab=products" class="shoppaton-admin-nav-item <?php echo $active_tab === 'products' ? 'active' : ''; ?>">
-                            📦 Products
+                            Products
                         </a>
                         <a href="?tab=orders" class="shoppaton-admin-nav-item <?php echo $active_tab === 'orders' ? 'active' : ''; ?>">
-                            🛒 Orders
+                            Orders
                         </a>
                         <a href="?tab=customers" class="shoppaton-admin-nav-item <?php echo $active_tab === 'customers' ? 'active' : ''; ?>">
-                            👥 Customers
+                            Customers
                         </a>
                         <a href="?tab=analytics" class="shoppaton-admin-nav-item <?php echo $active_tab === 'analytics' ? 'active' : ''; ?>">
-                            📈 Analytics
+                            Analytics
                         </a>
                         <a href="?tab=media" class="shoppaton-admin-nav-item <?php echo $active_tab === 'media' ? 'active' : ''; ?>">
-                            🖼️ Media
+                            Media
                         </a>
                         <a href="?tab=settings" class="shoppaton-admin-nav-item <?php echo $active_tab === 'settings' ? 'active' : ''; ?>">
-                            ⚙️ Settings
+                            Settings
                         </a>
                     </nav>
                 </div>
@@ -76,47 +138,43 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
                 <!-- Dashboard Overview -->
                 <div class="shoppaton-admin-dashboard">
                     <!-- Quick Stats -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                        <div class="shoppaton-glass-card" style="padding: 25px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div class="shoppaton-glass-card" style="padding: 15px;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
-                                    <p style="color: var(--shoppaton-text-muted); margin: 0 0 5px; font-size: 14px;">Today's Sales</p>
-                                    <h3 style="margin: 0; color: var(--shoppaton-gold); font-size: 28px;" id="stat-today-sales">₦0</h3>
+                                    <p style="color: var(--shoppaton-text-muted); margin: 0 0 5px;">Today's Sales</p>
+                                    <h3 style="margin: 0; color: var(--shoppaton-gold); font-size: 20px;" id="stat-today-sales">₦0</h3>
                                 </div>
-                                <span style="font-size: 30px;">💰</span>
                             </div>
                         </div>
-                        <div class="shoppaton-glass-card" style="padding: 25px;">
+                        <div class="shoppaton-glass-card" style="padding: 15px;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
-                                    <p style="color: var(--shoppaton-text-muted); margin: 0 0 5px; font-size: 14px;">Pending Orders</p>
-                                    <h3 style="margin: 0; font-size: 28px;" id="stat-pending-orders">0</h3>
+                                    <p style="color: var(--shoppaton-text-muted); margin: 0 0 5px;">Pending Orders</p>
+                                    <h3 style="margin: 0; font-size: 20px;" id="stat-pending-orders">0</h3>
                                 </div>
-                                <span style="font-size: 30px;">📦</span>
                             </div>
                         </div>
-                        <div class="shoppaton-glass-card" style="padding: 25px;">
+                        <div class="shoppaton-glass-card" style="padding: 15px;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
-                                    <p style="color: var(--shoppaton-text-muted); margin: 0 0 5px; font-size: 14px;">Total Products</p>
-                                    <h3 style="margin: 0; font-size: 28px;" id="stat-products">0</h3>
+                                    <p style="color: var(--shoppaton-text-muted); margin: 0 0 5px;">Total Products</p>
+                                    <h3 style="margin: 0; font-size: 20px;" id="stat-products">0</h3>
                                 </div>
-                                <span style="font-size: 30px;">🏷️</span>
                             </div>
                         </div>
-                        <div class="shoppaton-glass-card" style="padding: 25px;">
+                        <div class="shoppaton-glass-card" style="padding: 15px;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
-                                    <p style="color: var(--shoppaton-text-muted); margin: 0 0 5px; font-size: 14px;">Customers</p>
-                                    <h3 style="margin: 0; font-size: 28px;" id="stat-customers">0</h3>
+                                    <p style="color: var(--shoppaton-text-muted); margin: 0 0 5px;">Customers</p>
+                                    <h3 style="margin: 0; font-size: 20px;" id="stat-customers">0</h3>
                                 </div>
-                                <span style="font-size: 30px;">👥</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Charts Row -->
-                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 30px;">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 20px;">
                         <div class="shoppaton-glass-card" style="padding: 25px;">
                             <h3 style="margin: 0 0 20px;">Sales Overview</h3>
                             <canvas id="sales-chart" height="200"></canvas>
