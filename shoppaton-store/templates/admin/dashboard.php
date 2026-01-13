@@ -316,7 +316,7 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
                                 <h3 style="margin: 0;" id="category-modal-title">Add Category</h3>
                                 <button type="button" onclick="closeCategoryModal()" style="background: none; border: none; color: var(--shoppaton-text-muted); font-size: 24px; cursor: pointer;">&times;</button>
                             </div>
-                            <form id="category-form">
+                            <form id="category-form" action="javascript:void(0);" method="post" onsubmit="return false;">
                                 <input type="hidden" id="category-id" value="">
                                 <div class="shoppaton-form-group" style="margin-bottom: 15px;">
                                     <label class="shoppaton-form-label">Category Name *</label>
@@ -724,7 +724,7 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
             <h2 id="product-modal-title">Add New Product</h2>
             <button type="button" class="shoppaton-modal-close">&times;</button>
         </div>
-        <form id="product-form">
+        <form id="product-form" action="javascript:void(0);" method="post" onsubmit="return false;">
             <div class="shoppaton-modal-body">
                 <input type="hidden" name="product_id" id="product-id">
                 
@@ -967,6 +967,18 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+// Ensure shoppatonData is available for the admin dashboard
+if (typeof shoppatonData === 'undefined') {
+    var shoppatonData = {
+        ajaxUrl: '<?php echo admin_url('admin-ajax.php'); ?>',
+        nonce: '<?php echo wp_create_nonce('shoppaton_nonce'); ?>',
+        homeUrl: '<?php echo home_url(); ?>',
+        assetsUrl: '<?php echo SHOPPATON_ASSETS_URL; ?>',
+        currency: '₦'
+    };
+}
+console.log('Admin Dashboard: shoppatonData available', shoppatonData);
+
 jQuery(document).ready(function($) {
     // Load dashboard stats
     if ($('#stat-today-sales').length) {
@@ -1006,16 +1018,29 @@ jQuery(document).ready(function($) {
         $(this).closest('.shoppaton-modal').hide();
     });
     
-    // Product form submission
-    $('#product-form').on('submit', function(e) {
+    // Product form submission - using event delegation and multiple prevention methods
+    $(document).on('submit', '#product-form', function(e) {
         e.preventDefault();
+        e.stopPropagation();
+        console.log('Product form submitted via AJAX');
         saveProduct($(this));
+        return false;
+    });
+    
+    // Also prevent the form's default submit action via button click
+    $(document).on('click', '#product-form button[type="submit"]', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Product save button clicked');
+        saveProduct($('#product-form'));
+        return false;
     });
     
     // Settings form submission
-    $('#admin-settings-form').on('submit', function(e) {
+    $(document).on('submit', '#admin-settings-form', function(e) {
         e.preventDefault();
         saveSettings($(this));
+        return false;
     });
     
     function loadDashboardStats() {
@@ -1151,8 +1176,15 @@ jQuery(document).ready(function($) {
     }
     
     function saveProduct($form) {
+        console.log('saveProduct called');
+        console.log('AJAX URL:', shoppatonData.ajaxUrl);
+        console.log('Nonce:', shoppatonData.nonce);
+        
         var btn = $form.find('button[type="submit"]');
         btn.prop('disabled', true).text('Saving...');
+        
+        var formData = $form.serialize();
+        console.log('Form data:', formData);
         
         $.ajax({
             url: shoppatonData.ajaxUrl,
@@ -1160,19 +1192,35 @@ jQuery(document).ready(function($) {
             data: {
                 action: 'shoppaton_admin_save_product',
                 nonce: shoppatonData.nonce,
-                product: $form.serialize()
+                product: formData
             },
             success: function(response) {
+                console.log('AJAX response:', response);
                 if (response.success) {
-                    Shoppaton.toast('Product saved successfully!', 'success');
+                    if (typeof Shoppaton !== 'undefined' && Shoppaton.toast) {
+                        Shoppaton.toast('Product saved successfully!', 'success');
+                    } else {
+                        alert('Product saved successfully!');
+                    }
                     $('#product-modal').hide();
                     loadProducts();
                 } else {
-                    Shoppaton.toast(response.data.message || 'Error saving product', 'error');
+                    var msg = response.data && response.data.message ? response.data.message : 'Error saving product';
+                    if (typeof Shoppaton !== 'undefined' && Shoppaton.toast) {
+                        Shoppaton.toast(msg, 'error');
+                    } else {
+                        alert(msg);
+                    }
                 }
             },
-            error: function() {
-                Shoppaton.toast('Error saving product. Please try again.', 'error');
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', status, error);
+                console.error('Response:', xhr.responseText);
+                if (typeof Shoppaton !== 'undefined' && Shoppaton.toast) {
+                    Shoppaton.toast('Error saving product. Please try again.', 'error');
+                } else {
+                    alert('Error saving product. Please try again.');
+                }
             },
             complete: function() {
                 btn.prop('disabled', false).text('Save Product');
