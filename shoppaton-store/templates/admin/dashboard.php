@@ -1417,7 +1417,70 @@ jQuery(document).ready(function($) {
     $('#apply-date-range').on('click', function() {
         loadAnalytics();
     });
+    
+    // WordPress Media Uploader for Product Images
+    var productImages = [];
+    
+    $('.shoppaton-upload-product-images').on('click', function(e) {
+        e.preventDefault();
+        
+        // If the media frame already exists, reopen it.
+        if (typeof wp !== 'undefined' && wp.media) {
+            var mediaUploader = wp.media({
+                title: 'Select Product Images',
+                button: {
+                    text: 'Add Images'
+                },
+                multiple: true
+            });
+            
+            mediaUploader.on('select', function() {
+                var attachments = mediaUploader.state().get('selection').toJSON();
+                attachments.forEach(function(attachment) {
+                    productImages.push(attachment.url);
+                    $('#product-images-preview').append(
+                        '<div class="product-image-item" style="position: relative; display: inline-block;">' +
+                        '<img src="' + attachment.url + '" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">' +
+                        '<input type="hidden" name="images[]" value="' + attachment.url + '">' +
+                        '<button type="button" class="remove-product-image" style="position: absolute; top: -5px; right: -5px; background: #ff4444; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer;">&times;</button>' +
+                        '</div>'
+                    );
+                });
+            });
+            
+            mediaUploader.open();
+        } else {
+            // Fallback: prompt for image URL
+            var imageUrl = prompt('Enter image URL:');
+            if (imageUrl) {
+                productImages.push(imageUrl);
+                $('#product-images-preview').append(
+                    '<div class="product-image-item" style="position: relative; display: inline-block;">' +
+                    '<img src="' + imageUrl + '" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">' +
+                    '<input type="hidden" name="images[]" value="' + imageUrl + '">' +
+                    '<button type="button" class="remove-product-image" style="position: absolute; top: -5px; right: -5px; background: #ff4444; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer;">&times;</button>' +
+                    '</div>'
+                );
+            }
+        }
+    });
+    
+    // Remove product image
+    $(document).on('click', '.remove-product-image', function() {
+        $(this).closest('.product-image-item').remove();
+    });
+    
+    // Clear images when modal opens for new product
+    $('#add-new-product').on('click', function() {
+        productImages = [];
+        $('#product-images-preview').empty();
+    });
 });
 </script>
+
+<?php 
+// Enqueue WordPress media uploader
+wp_enqueue_media();
+?>
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/footer.php'; ?>

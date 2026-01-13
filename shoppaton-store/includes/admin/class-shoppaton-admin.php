@@ -1532,6 +1532,16 @@ class Shoppaton_Admin {
 
         $product_id = intval($product_data['product_id'] ?? 0);
         
+        // Handle images array from form
+        $images = array();
+        if (!empty($product_data['images'])) {
+            if (is_array($product_data['images'])) {
+                $images = array_map('esc_url_raw', $product_data['images']);
+            } else {
+                $images = array(esc_url_raw($product_data['images']));
+            }
+        }
+        
         $data = array(
             'name' => sanitize_text_field($product_data['name'] ?? ''),
             'description' => wp_kses_post($product_data['description'] ?? ''),
@@ -1543,6 +1553,7 @@ class Shoppaton_Admin {
             'skin_type' => sanitize_text_field($product_data['skin_type'] ?? ''),
             'target_user' => sanitize_text_field($product_data['target_user'] ?? ''),
             'status' => ($product_data['status'] ?? 'active') === 'active' ? 'publish' : 'draft',
+            'images' => maybe_serialize($images),
         );
 
         // Validate required fields
