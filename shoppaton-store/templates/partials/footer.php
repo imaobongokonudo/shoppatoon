@@ -17,7 +17,7 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
         <div class="shoppaton-footer-grid">
             <!-- About Column -->
             <div class="shoppaton-footer-about">
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="shoppaton-footer-logo">
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="shoppaton-footer-logo shoppaton-logo-sparkle-enabled">
                     <img src="<?php echo esc_url($logo_url); ?>" alt="Shoppaton Store">
                 </a>
                 <p class="shoppaton-footer-desc">

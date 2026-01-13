@@ -15,7 +15,7 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
 <header class="shoppaton-header">
     <div class="shoppaton-container">
         <div class="shoppaton-header-inner">
-            <a href="<?php echo esc_url(home_url('/')); ?>" class="shoppaton-logo shoppaton-logo-sparkle">
+            <a href="<?php echo esc_url(home_url('/')); ?>" class="shoppaton-logo">
                 <img src="<?php echo esc_url($logo_url); ?>" alt="Shoppaton Store">
             </a>
 
