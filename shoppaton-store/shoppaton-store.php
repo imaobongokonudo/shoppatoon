@@ -478,6 +478,8 @@ final class Shoppaton_Store {
      * Add preconnects for performance
      */
     public function add_preconnects() {
+        // Add viewport meta for proper mobile scaling
+        echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">' . "\n";
         echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
         echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
         echo '<link rel="dns-prefetch" href="https://js.paystack.co">' . "\n";
