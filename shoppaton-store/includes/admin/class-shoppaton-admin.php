@@ -60,6 +60,12 @@ class Shoppaton_Admin {
         add_action('wp_ajax_shoppaton_admin_get_product', array($this, 'get_product_frontend'));
         add_action('wp_ajax_shoppaton_admin_update_order_status', array($this, 'update_order_status_frontend'));
         add_action('wp_ajax_shoppaton_admin_update_tracking', array($this, 'update_tracking_frontend'));
+        
+        // Category AJAX handlers for frontend
+        add_action('wp_ajax_shoppaton_get_categories', array($this, 'get_categories_frontend'));
+        add_action('wp_ajax_shoppaton_get_category', array($this, 'get_category_frontend'));
+        add_action('wp_ajax_shoppaton_save_category', array($this, 'save_category_frontend'));
+        add_action('wp_ajax_shoppaton_delete_category', array($this, 'delete_category_frontend'));
     }
 
     /**
@@ -1788,6 +1794,133 @@ class Shoppaton_Admin {
             wp_send_json_success(array('message' => 'Product saved successfully'));
         } else {
             wp_send_json_error(array('message' => 'Failed to save product'));
+        }
+    }
+
+    /**
+     * Get all categories (frontend)
+     */
+    public function get_categories_frontend() {
+        check_ajax_referer('shoppaton_admin', '_wpnonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+        
+        global $wpdb;
+        $table = $wpdb->prefix . 'shoppaton_categories';
+        $categories = $wpdb->get_results("SELECT * FROM {$table} ORDER BY name ASC");
+        
+        wp_send_json_success($categories);
+    }
+
+    /**
+     * Get single category (frontend)
+     */
+    public function get_category_frontend() {
+        check_ajax_referer('shoppaton_admin', '_wpnonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+        
+        $id = intval($_GET['id'] ?? 0);
+        if (!$id) {
+            wp_send_json_error('Invalid category ID');
+        }
+        
+        global $wpdb;
+        $table = $wpdb->prefix . 'shoppaton_categories';
+        $category = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$table} WHERE id = %d", $id));
+        
+        if ($category) {
+            wp_send_json_success($category);
+        } else {
+            wp_send_json_error('Category not found');
+        }
+    }
+
+    /**
+     * Save category (frontend)
+     */
+    public function save_category_frontend() {
+        check_ajax_referer('shoppaton_admin', '_wpnonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+        
+        global $wpdb;
+        $table = $wpdb->prefix . 'shoppaton_categories';
+        
+        $id = intval($_POST['id'] ?? 0);
+        $name = sanitize_text_field($_POST['name'] ?? '');
+        $description = sanitize_textarea_field($_POST['description'] ?? '');
+        $image = esc_url_raw($_POST['image'] ?? '');
+        $slug = sanitize_title($name);
+        
+        if (empty($name)) {
+            wp_send_json_error('Category name is required');
+        }
+        
+        if ($id) {
+            // Update
+            $result = $wpdb->update(
+                $table,
+                array(
+                    'name' => $name,
+                    'slug' => $slug,
+                    'description' => $description,
+                    'image' => $image
+                ),
+                array('id' => $id),
+                array('%s', '%s', '%s', '%s'),
+                array('%d')
+            );
+        } else {
+            // Insert
+            $result = $wpdb->insert(
+                $table,
+                array(
+                    'name' => $name,
+                    'slug' => $slug,
+                    'description' => $description,
+                    'image' => $image
+                ),
+                array('%s', '%s', '%s', '%s')
+            );
+        }
+        
+        if ($result !== false) {
+            wp_send_json_success(array('message' => 'Category saved successfully'));
+        } else {
+            wp_send_json_error('Failed to save category');
+        }
+    }
+
+    /**
+     * Delete category (frontend)
+     */
+    public function delete_category_frontend() {
+        check_ajax_referer('shoppaton_admin', '_wpnonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+        
+        $id = intval($_POST['id'] ?? 0);
+        if (!$id) {
+            wp_send_json_error('Invalid category ID');
+        }
+        
+        global $wpdb;
+        $table = $wpdb->prefix . 'shoppaton_categories';
+        $result = $wpdb->delete($table, array('id' => $id), array('%d'));
+        
+        if ($result) {
+            wp_send_json_success(array('message' => 'Category deleted successfully'));
+        } else {
+            wp_send_json_error('Failed to delete category');
         }
     }
 }

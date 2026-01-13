@@ -70,14 +70,14 @@ class Shoppaton_Widgets {
     private function render_scroll_to_top() {
         ?>
         <style>
-        /* Scroll to Top - Smaller Single Circle with Gold Arrow */
+        /* Scroll to Top - Clean Circle with Gold Arrow and Glow */
         .shoppaton-scroll-top {
             position: fixed;
             bottom: 25px;
             left: 20px;
-            width: 40px;
-            height: 40px;
-            background: rgba(20, 20, 20, 0.9);
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(20, 20, 20, 0.95));
             border: 2px solid #D4AF37;
             border-radius: 50%;
             cursor: pointer;
@@ -88,63 +88,43 @@ class Shoppaton_Widgets {
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4), inset 0 0 8px rgba(212, 175, 55, 0.1);
         }
         .shoppaton-scroll-top.visible {
             opacity: 1;
             visibility: visible;
         }
         .shoppaton-scroll-top:hover {
-            background: #D4AF37;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #D4AF37, #B8860B);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), 0 0 40px rgba(212, 175, 55, 0.3);
+            transform: translateY(-3px) scale(1.05);
         }
         .shoppaton-scroll-top:hover .scroll-arrow {
             stroke: #0a0a0a;
         }
-        /* Progress Ring */
-        .shoppaton-scroll-progress {
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            width: 46px;
-            height: 46px;
-            transform: rotate(-90deg);
-        }
-        .shoppaton-scroll-progress circle {
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-        }
-        .progress-track {
-            stroke: rgba(212, 175, 55, 0.2);
-        }
-        .progress-fill {
-            stroke: #D4AF37;
-            stroke-dasharray: 132;
-            stroke-dashoffset: 132;
-            transition: stroke-dashoffset 0.1s;
-        }
-        /* Arrow Icon */
+        /* Arrow Icon - Sparkling Gold */
         .scroll-arrow {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             stroke: #D4AF37;
             stroke-width: 2.5;
             fill: none;
             transition: stroke 0.3s;
+            filter: drop-shadow(0 0 2px rgba(212, 175, 55, 0.6));
         }
         @media (max-width: 768px) {
             .shoppaton-scroll-top {
                 bottom: 80px;
+                width: 32px;
+                height: 32px;
+            }
+            .scroll-arrow {
+                width: 12px;
+                height: 12px;
             }
         }
         </style>
         <button class="shoppaton-scroll-top" aria-label="Scroll to top">
-            <svg class="shoppaton-scroll-progress" viewBox="0 0 46 46">
-                <circle class="progress-track" cx="23" cy="23" r="21"/>
-                <circle class="progress-fill" cx="23" cy="23" r="21"/>
-            </svg>
             <svg class="scroll-arrow" viewBox="0 0 24 24">
                 <polyline points="18 15 12 9 6 15"/>
             </svg>
@@ -152,19 +132,10 @@ class Shoppaton_Widgets {
         <script>
         (function() {
             var btn = document.querySelector('.shoppaton-scroll-top');
-            var progressCircle = document.querySelector('.progress-fill');
-            if (!btn || !progressCircle) return;
+            if (!btn) return;
             
-            var circumference = 2 * Math.PI * 21;
-            progressCircle.style.strokeDasharray = circumference;
-            
-            function updateProgress() {
+            function updateVisibility() {
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                var scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0;
-                var offset = circumference - (scrollPercent * circumference);
-                progressCircle.style.strokeDashoffset = offset;
-                
                 if (scrollTop > 300) {
                     btn.classList.add('visible');
                 } else {
@@ -172,11 +143,11 @@ class Shoppaton_Widgets {
                 }
             }
             
-            window.addEventListener('scroll', updateProgress);
+            window.addEventListener('scroll', updateVisibility);
             btn.addEventListener('click', function() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
-            updateProgress();
+            updateVisibility();
         })();
         </script>
         <?php

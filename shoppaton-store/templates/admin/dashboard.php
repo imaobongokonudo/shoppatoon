@@ -113,6 +113,9 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
                         <a href="?tab=products" class="shoppaton-admin-nav-item <?php echo $active_tab === 'products' ? 'active' : ''; ?>">
                             Products
                         </a>
+                        <a href="?tab=categories" class="shoppaton-admin-nav-item <?php echo $active_tab === 'categories' ? 'active' : ''; ?>">
+                            Categories
+                        </a>
                         <a href="?tab=orders" class="shoppaton-admin-nav-item <?php echo $active_tab === 'orders' ? 'active' : ''; ?>">
                             Orders
                         </a>
@@ -288,6 +291,176 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
                         <div id="orders-pagination" style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;"></div>
                     </div>
                 </div>
+
+                <?php elseif ($active_tab === 'categories') : ?>
+                <!-- Categories Management -->
+                <div class="shoppaton-admin-categories">
+                    <div class="shoppaton-glass-card" style="padding: 25px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                            <h3 style="margin: 0;">Categories</h3>
+                            <button type="button" class="shoppaton-btn shoppaton-btn-primary" onclick="showCategoryModal()">
+                                Add Category
+                            </button>
+                        </div>
+
+                        <!-- Categories Grid -->
+                        <div id="categories-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                            <!-- Categories will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Category Modal -->
+                    <div id="category-modal" class="shoppaton-modal" style="display: none;">
+                        <div class="shoppaton-modal-content shoppaton-glass-card" style="padding: 25px; max-width: 500px; margin: 50px auto;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0;" id="category-modal-title">Add Category</h3>
+                                <button type="button" onclick="closeCategoryModal()" style="background: none; border: none; color: var(--shoppaton-text-muted); font-size: 24px; cursor: pointer;">&times;</button>
+                            </div>
+                            <form id="category-form">
+                                <input type="hidden" id="category-id" value="">
+                                <div class="shoppaton-form-group" style="margin-bottom: 15px;">
+                                    <label class="shoppaton-form-label">Category Name *</label>
+                                    <input type="text" id="category-name" class="shoppaton-form-input" required placeholder="e.g. Face Care">
+                                </div>
+                                <div class="shoppaton-form-group" style="margin-bottom: 15px;">
+                                    <label class="shoppaton-form-label">Description</label>
+                                    <textarea id="category-description" class="shoppaton-form-textarea" rows="3" placeholder="Category description"></textarea>
+                                </div>
+                                <div class="shoppaton-form-group" style="margin-bottom: 20px;">
+                                    <label class="shoppaton-form-label">Category Image</label>
+                                    <div id="category-image-preview" style="width: 100px; height: 100px; border: 2px dashed var(--shoppaton-gold); border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center; margin-bottom: 10px; overflow: hidden;">
+                                        <span style="color: var(--shoppaton-text-muted); font-size: 11px; text-align: center;">No Image</span>
+                                    </div>
+                                    <input type="text" id="category-image-url" class="shoppaton-form-input" placeholder="Image URL or upload below">
+                                    <input type="file" id="category-image-upload" accept="image/*" style="margin-top: 10px;">
+                                </div>
+                                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                    <button type="button" class="shoppaton-btn shoppaton-btn-secondary" onclick="closeCategoryModal()">Cancel</button>
+                                    <button type="submit" class="shoppaton-btn shoppaton-btn-primary" id="save-category-btn">Save Category</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                // Categories management
+                function loadCategories() {
+                    fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=shoppaton_get_categories&_wpnonce=<?php echo wp_create_nonce('shoppaton_admin'); ?>')
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                renderCategories(data.data);
+                            }
+                        });
+                }
+
+                function renderCategories(categories) {
+                    const grid = document.getElementById('categories-grid');
+                    if (!categories.length) {
+                        grid.innerHTML = '<p style="color: var(--shoppaton-text-muted); grid-column: 1/-1; text-align: center;">No categories yet. Add your first category!</p>';
+                        return;
+                    }
+                    grid.innerHTML = categories.map(cat => `
+                        <div class="shoppaton-glass-card" style="padding: 20px; text-align: center;">
+                            <div style="width: 80px; height: 80px; margin: 0 auto 15px; border-radius: 50%; overflow: hidden; background: var(--shoppaton-black-light);">
+                                ${cat.image ? `<img src="${cat.image}" style="width: 100%; height: 100%; object-fit: cover;">` : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--shoppaton-text-muted); font-size: 11px;">No Image</div>'}
+                            </div>
+                            <h4 style="margin: 0 0 5px; color: var(--shoppaton-white); font-size: 14px;">${cat.name}</h4>
+                            <p style="color: var(--shoppaton-text-muted); margin: 0 0 15px; font-size: 11px;">${cat.description || ''}</p>
+                            <div style="display: flex; gap: 10px; justify-content: center;">
+                                <button onclick="editCategory(${cat.id})" class="shoppaton-btn shoppaton-btn-secondary" style="padding: 6px 12px; font-size: 10px;">Edit</button>
+                                <button onclick="deleteCategory(${cat.id})" class="shoppaton-btn" style="padding: 6px 12px; font-size: 10px; background: #ff4444; color: #fff;">Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                function showCategoryModal() {
+                    document.getElementById('category-modal').style.display = 'block';
+                    document.getElementById('category-modal-title').textContent = 'Add Category';
+                    document.getElementById('category-form').reset();
+                    document.getElementById('category-id').value = '';
+                    document.getElementById('category-image-preview').innerHTML = '<span style="color: var(--shoppaton-text-muted); font-size: 11px; text-align: center;">No Image</span>';
+                }
+
+                function closeCategoryModal() {
+                    document.getElementById('category-modal').style.display = 'none';
+                }
+
+                function editCategory(id) {
+                    fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=shoppaton_get_category&id=' + id + '&_wpnonce=<?php echo wp_create_nonce('shoppaton_admin'); ?>')
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                const cat = data.data;
+                                document.getElementById('category-id').value = cat.id;
+                                document.getElementById('category-name').value = cat.name;
+                                document.getElementById('category-description').value = cat.description || '';
+                                document.getElementById('category-image-url').value = cat.image || '';
+                                if (cat.image) {
+                                    document.getElementById('category-image-preview').innerHTML = `<img src="${cat.image}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                                }
+                                document.getElementById('category-modal-title').textContent = 'Edit Category';
+                                document.getElementById('category-modal').style.display = 'block';
+                            }
+                        });
+                }
+
+                function deleteCategory(id) {
+                    if (!confirm('Are you sure you want to delete this category?')) return;
+                    fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                        body: 'action=shoppaton_delete_category&id=' + id + '&_wpnonce=<?php echo wp_create_nonce('shoppaton_admin'); ?>'
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            loadCategories();
+                        } else {
+                            alert('Error: ' + (data.data || 'Could not delete category'));
+                        }
+                    });
+                }
+
+                document.getElementById('category-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const formData = new FormData();
+                    formData.append('action', 'shoppaton_save_category');
+                    formData.append('_wpnonce', '<?php echo wp_create_nonce('shoppaton_admin'); ?>');
+                    formData.append('id', document.getElementById('category-id').value);
+                    formData.append('name', document.getElementById('category-name').value);
+                    formData.append('description', document.getElementById('category-description').value);
+                    formData.append('image', document.getElementById('category-image-url').value);
+
+                    fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            closeCategoryModal();
+                            loadCategories();
+                        } else {
+                            alert('Error: ' + (data.data || 'Could not save category'));
+                        }
+                    });
+                });
+
+                // Image preview
+                document.getElementById('category-image-url').addEventListener('input', function() {
+                    if (this.value) {
+                        document.getElementById('category-image-preview').innerHTML = `<img src="${this.value}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                    }
+                });
+
+                // Load categories on page load
+                if (document.querySelector('.shoppaton-admin-categories')) {
+                    loadCategories();
+                }
+                </script>
 
                 <?php elseif ($active_tab === 'analytics') : ?>
                 <!-- Analytics -->

@@ -378,6 +378,10 @@ final class Shoppaton_Store {
                 'title' => 'Wishlist',
                 'content' => '[shoppaton_wishlist]'
             ),
+            'categories' => array(
+                'title' => 'Categories',
+                'content' => '[shoppaton_categories]'
+            ),
             'admin-dashboard' => array(
                 'title' => 'Admin Dashboard',
                 'content' => '[shoppaton_admin_dashboard]'
@@ -594,7 +598,12 @@ final class Shoppaton_Store {
             const dismissed = localStorage.getItem('pwa_dismissed');
             const installed = localStorage.getItem('pwa_installed');
             
-            if (dismissed || installed) return;
+            // Don't show if already installed (running as PWA)
+            if (window.matchMedia('(display-mode: standalone)').matches || 
+                window.navigator.standalone === true ||
+                dismissed || installed) {
+                return;
+            }
             
             if (browser === 'ios') {
                 pwaInstruction.innerHTML = 'Tap <svg style="width:14px;height:14px;vertical-align:middle" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l4 4h-3v9h-2V6H8l4-4zm6 9v9H6v-9H4v9c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-9h-2z"/></svg> then "Add to Home Screen"';

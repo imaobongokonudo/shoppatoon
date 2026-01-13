@@ -1953,3 +1953,110 @@ main > *:last-child,
         display: block;
     }
 }
+
+/* Categories Grid Section */
+.shoppaton-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.shoppaton-category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 15px;
+    text-align: center;
+    text-decoration: none !important;
+    transition: var(--transition-normal);
+}
+
+.shoppaton-category-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--shoppaton-gold);
+    box-shadow: var(--shadow-gold);
+}
+
+.shoppaton-category-image {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.shoppaton-category-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.shoppaton-category-image .shoppaton-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--shoppaton-glass);
+    border: 1px dashed var(--shoppaton-gold);
+    color: var(--shoppaton-gold);
+}
+
+.shoppaton-category-name {
+    font-size: 0.9rem;
+    color: var(--shoppaton-white);
+    -webkit-text-fill-color: var(--shoppaton-white);
+    margin: 0;
+}
+
+/* Mobile footer logo - smaller */
+@media (max-width: 768px) {
+    .shoppaton-footer-logo img {
+        height: 35px !important;
+    }
+    
+    /* Mobile header logo - slightly bigger */
+    .shoppaton-logo img {
+        height: 44px !important;
+    }
+    
+    /* WhatsApp widget smaller on mobile */
+    .shoppaton-whatsapp-widget .shoppaton-whatsapp-btn {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    .shoppaton-whatsapp-widget .shoppaton-whatsapp-btn svg {
+        width: 18px !important;
+        height: 18px !important;
+    }
+    
+    /* Categories grid mobile */
+    .shoppaton-categories-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+    
+    .shoppaton-category-card {
+        padding: 15px 10px;
+    }
+    
+    .shoppaton-category-image {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .shoppaton-category-name {
+        font-size: 0.75rem;
+    }
+}
+
+/* Footer links sparkling gold for both mobile and desktop */
+.shoppaton-footer-links li a {
+    color: var(--shoppaton-gold) !important;
+    background: var(--shoppaton-gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

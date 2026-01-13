@@ -58,6 +58,7 @@ class Shoppaton_Shortcodes {
             'shoppaton_trust_signals',
             'shoppaton_reviews',
             'shoppaton_contact_form',
+            'shoppaton_categories',
         );
 
         foreach ($shortcodes as $shortcode) {
@@ -414,6 +415,15 @@ class Shoppaton_Shortcodes {
             </button>
         </form>
         <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Categories shortcode
+     */
+    public function categories($atts) {
+        ob_start();
+        include SHOPPATON_PLUGIN_DIR . 'templates/pages/categories.php';
         return ob_get_clean();
     }
 }

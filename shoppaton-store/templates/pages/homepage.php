@@ -14,6 +14,11 @@ $featured_products = $products->get_products(array('featured' => true, 'limit' =
 $best_sellers = $products->get_products(array('best_seller' => true, 'limit' => 8));
 $all_products = $products->get_products(array('limit' => 8));
 $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
+
+// Get categories
+global $wpdb;
+$categories_table = $wpdb->prefix . 'shoppaton_categories';
+$categories = $wpdb->get_results("SELECT * FROM {$categories_table} ORDER BY name ASC LIMIT 6");
 ?>
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/header.php'; ?>
@@ -48,6 +53,116 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
                     Learn More About Us
                 </a>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="shoppaton-section" data-section="Categories" style="background: var(--shoppaton-glass);">
+    <div class="shoppaton-container">
+        <div class="shoppaton-section-header">
+            <span class="shoppaton-section-subtitle">Browse By Category</span>
+            <h2 class="shoppaton-section-title">Shop By Categories</h2>
+            <p class="shoppaton-section-desc">
+                Find the perfect skincare products for your needs. Browse our carefully curated categories.
+            </p>
+        </div>
+        
+        <div class="shoppaton-categories-grid">
+            <?php if (!empty($categories)) : ?>
+                <?php foreach ($categories as $category) : ?>
+                <a href="<?php echo esc_url(add_query_arg('category', $category->id, get_permalink(get_page_by_path('shop')))); ?>" class="shoppaton-category-card shoppaton-glass-card shoppaton-animate animate-on-scroll shoppaton-fade-in-up">
+                    <div class="shoppaton-category-image">
+                        <?php if (!empty($category->image)) : ?>
+                            <img src="<?php echo esc_url($category->image); ?>" alt="<?php echo esc_attr($category->name); ?>">
+                        <?php else : ?>
+                            <div class="shoppaton-image-placeholder" style="aspect-ratio: 1/1; border-radius: 50%;">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <h3 class="shoppaton-category-name"><?php echo esc_html($category->name); ?></h3>
+                </a>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <!-- Default categories when none exist -->
+                <a href="<?php echo esc_url(get_permalink(get_page_by_path('shop'))); ?>" class="shoppaton-category-card shoppaton-glass-card shoppaton-animate animate-on-scroll shoppaton-fade-in-up">
+                    <div class="shoppaton-category-image">
+                        <div class="shoppaton-image-placeholder" style="aspect-ratio: 1/1; border-radius: 50%;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                                <line x1="9" y1="9" x2="9.01" y2="9"/>
+                                <line x1="15" y1="9" x2="15.01" y2="9"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="shoppaton-category-name">Face Care</h3>
+                </a>
+                <a href="<?php echo esc_url(get_permalink(get_page_by_path('shop'))); ?>" class="shoppaton-category-card shoppaton-glass-card shoppaton-animate animate-on-scroll shoppaton-fade-in-up">
+                    <div class="shoppaton-category-image">
+                        <div class="shoppaton-image-placeholder" style="aspect-ratio: 1/1; border-radius: 50%;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="shoppaton-category-name">Body Care</h3>
+                </a>
+                <a href="<?php echo esc_url(get_permalink(get_page_by_path('shop'))); ?>" class="shoppaton-category-card shoppaton-glass-card shoppaton-animate animate-on-scroll shoppaton-fade-in-up">
+                    <div class="shoppaton-category-image">
+                        <div class="shoppaton-image-placeholder" style="aspect-ratio: 1/1; border-radius: 50%;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="shoppaton-category-name">Serums</h3>
+                </a>
+                <a href="<?php echo esc_url(get_permalink(get_page_by_path('shop'))); ?>" class="shoppaton-category-card shoppaton-glass-card shoppaton-animate animate-on-scroll shoppaton-fade-in-up">
+                    <div class="shoppaton-category-image">
+                        <div class="shoppaton-image-placeholder" style="aspect-ratio: 1/1; border-radius: 50%;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="12" r="5"/>
+                                <line x1="12" y1="1" x2="12" y2="3"/>
+                                <line x1="12" y1="21" x2="12" y2="23"/>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="shoppaton-category-name">Sunscreen</h3>
+                </a>
+                <a href="<?php echo esc_url(get_permalink(get_page_by_path('shop'))); ?>" class="shoppaton-category-card shoppaton-glass-card shoppaton-animate animate-on-scroll shoppaton-fade-in-up">
+                    <div class="shoppaton-category-image">
+                        <div class="shoppaton-image-placeholder" style="aspect-ratio: 1/1; border-radius: 50%;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="shoppaton-category-name">Moisturizers</h3>
+                </a>
+                <a href="<?php echo esc_url(get_permalink(get_page_by_path('shop'))); ?>" class="shoppaton-category-card shoppaton-glass-card shoppaton-animate animate-on-scroll shoppaton-fade-in-up">
+                    <div class="shoppaton-category-image">
+                        <div class="shoppaton-image-placeholder" style="aspect-ratio: 1/1; border-radius: 50%;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="shoppaton-category-name">Cleansers</h3>
+                </a>
+            <?php endif; ?>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="<?php echo esc_url(get_permalink(get_page_by_path('categories'))); ?>" class="shoppaton-btn shoppaton-btn-secondary">
+                View All Categories
+            </a>
         </div>
     </div>
 </section>
