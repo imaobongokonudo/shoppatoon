@@ -28,27 +28,33 @@ $categories = $wpdb->get_results("SELECT * FROM {$categories_table} ORDER BY nam
 
 <!-- About Section -->
 <section class="shoppaton-section" data-section="About">
-    <div class="shoppaton-container" style="max-width: 100%; overflow-x: hidden; padding: 0 15px;">
-        <div class="shoppaton-about-grid" style="max-width: 100%; overflow-x: hidden;">
-            <div class="shoppaton-about-image shoppaton-animate animate-on-scroll shoppaton-fade-in-left" style="max-width: 100%;">
-                <div class="shoppaton-image-placeholder" style="aspect-ratio: 4/3; max-width: 100%;">
-                    <span>About Us Image<br>Upload in Admin</span>
-                </div>
+    <div class="shoppaton-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px; overflow-x: hidden;">
+        <div class="shoppaton-section-header" style="text-align: center; margin-bottom: 40px;">
+            <span class="shoppaton-section-subtitle">About Shoppaton</span>
+            <h2 class="shoppaton-section-title">Your Trusted Skincare Partner Since 2022</h2>
+        </div>
+        
+        <!-- Image placed directly under heading -->
+        <div class="shoppaton-about-image-container shoppaton-animate animate-on-scroll shoppaton-fade-in-up" style="max-width: 600px; margin: 0 auto 40px; padding: 0 10px;">
+            <div class="shoppaton-image-placeholder" style="aspect-ratio: 16/10; max-width: 100%; border-radius: var(--border-radius-lg);">
+                <span>About Us Image<br>Upload in Admin</span>
             </div>
-            <div class="shoppaton-about-content shoppaton-animate animate-on-scroll shoppaton-fade-in-right">
-                <span class="shoppaton-section-subtitle">About Shoppaton</span>
-                <h2 class="shoppaton-section-title">Your Trusted Skincare Partner Since 2022</h2>
-                <p>
-                    At Shoppaton Store, we believe everyone deserves to feel confident in their skin. 
-                    Based in Lagos, Nigeria, we've been curating premium skincare essentials that deliver 
-                    real results for our valued customers.
-                </p>
-                <ul class="shoppaton-about-list">
-                    <li>100% Authentic Products</li>
-                    <li>Expert Skincare Recommendations</li>
-                    <li>Fast & Reliable Delivery Across Nigeria</li>
-                    <li>Dedicated Customer Support</li>
-                </ul>
+        </div>
+        
+        <!-- Content below image -->
+        <div class="shoppaton-about-content shoppaton-animate animate-on-scroll shoppaton-fade-in-up" style="max-width: 800px; margin: 0 auto; text-align: center; padding: 0 15px;">
+            <p style="margin-bottom: 25px; font-size: 14px; line-height: 1.8; color: var(--shoppaton-text);">
+                At Shoppaton Store, we believe everyone deserves to feel confident in their skin. 
+                Based in Lagos, Nigeria, we've been curating premium skincare essentials that deliver 
+                real results for our valued customers.
+            </p>
+            <ul class="shoppaton-about-list" style="display: inline-block; text-align: left; margin-bottom: 30px;">
+                <li>100% Authentic Products</li>
+                <li>Expert Skincare Recommendations</li>
+                <li>Fast & Reliable Delivery Across Nigeria</li>
+                <li>Dedicated Customer Support</li>
+            </ul>
+            <div>
                 <a href="<?php echo esc_url(get_permalink(get_page_by_path('about-us'))); ?>" class="shoppaton-btn shoppaton-btn-primary">
                     Learn More About Us
                 </a>

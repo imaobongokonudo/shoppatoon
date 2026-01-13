@@ -38,11 +38,12 @@ class Shoppaton_Admin {
      */
     private function __construct() {
         add_action('admin_menu', array($this, 'add_admin_menu'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
         
         // Backend admin AJAX handlers (use admin nonce)
-        add_action('wp_ajax_shoppaton_admin_save_product', array($this, 'save_product_backend'));
-        add_action('wp_ajax_shoppaton_admin_delete_product', array($this, 'delete_product_backend'));
-        add_action('wp_ajax_shoppaton_admin_save_settings', array($this, 'save_settings_backend'));
+        add_action('wp_ajax_shoppaton_backend_save_product', array($this, 'save_product_backend'));
+        add_action('wp_ajax_shoppaton_backend_delete_product', array($this, 'delete_product_backend'));
+        add_action('wp_ajax_shoppaton_backend_save_settings', array($this, 'save_settings_backend'));
         add_action('wp_ajax_shoppaton_admin_save_slider', array($this, 'save_slider'));
         add_action('wp_ajax_shoppaton_admin_delete_slider', array($this, 'delete_slider'));
         add_action('wp_ajax_shoppaton_admin_update_order', array($this, 'update_order'));
@@ -66,6 +67,18 @@ class Shoppaton_Admin {
         add_action('wp_ajax_shoppaton_get_category', array($this, 'get_category_frontend'));
         add_action('wp_ajax_shoppaton_save_category', array($this, 'save_category_frontend'));
         add_action('wp_ajax_shoppaton_delete_category', array($this, 'delete_category_frontend'));
+    }
+
+    /**
+     * Enqueue admin styles
+     */
+    public function enqueue_admin_styles() {
+        wp_enqueue_style(
+            'shoppaton-admin-styles',
+            SHOPPATON_ASSETS_URL . 'css/admin-styles.css',
+            array(),
+            SHOPPATON_VERSION
+        );
     }
 
     /**

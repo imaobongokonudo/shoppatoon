@@ -14,10 +14,10 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/header.php'; ?>
 
-<div class="shoppaton-about-page" style="padding-top: 120px; padding-bottom: 80px; min-height: 100vh; padding-left: 15px; padding-right: 15px;">
-    <div class="shoppaton-container" style="max-width: 100%; overflow-x: hidden;">
+<div class="shoppaton-about-page" style="padding-top: 120px; padding-bottom: 80px; min-height: 100vh; padding-left: 20px; padding-right: 20px;">
+    <div class="shoppaton-container" style="max-width: 1200px; margin: 0 auto; overflow-x: hidden;">
         <!-- Page Header -->
-        <div class="shoppaton-page-header" style="text-align: center; margin-bottom: 60px;">
+        <div class="shoppaton-page-header" style="text-align: center; margin-bottom: 60px; padding: 0 10px;">
             <span class="shoppaton-section-subtitle">Our Story</span>
             <h1 class="shoppaton-gold-text-animated">About Shoppaton</h1>
             <p style="color: var(--shoppaton-text-muted); max-width: 600px; margin: 20px auto 0;">
@@ -26,16 +26,19 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
             </p>
         </div>
 
-        <!-- About Section -->
+        <!-- About Section - Stacked Layout -->
         <section class="shoppaton-section" style="padding-top: 0;">
-            <div class="shoppaton-about-grid" style="max-width: 100%; overflow-x: hidden;">
-                <div class="shoppaton-about-image shoppaton-animate animate-on-scroll shoppaton-fade-in-left" style="max-width: 100%;">
-                    <div class="shoppaton-image-placeholder" style="aspect-ratio: 4/3; max-width: 100%;">
+            <div style="max-width: 700px; margin: 0 auto; text-align: center; padding: 0 10px;">
+                <!-- Image first -->
+                <div class="shoppaton-about-image shoppaton-animate animate-on-scroll shoppaton-fade-in-up" style="max-width: 100%; margin-bottom: 40px;">
+                    <div class="shoppaton-image-placeholder" style="aspect-ratio: 16/10; max-width: 100%; border-radius: var(--border-radius-lg);">
                         <span>About Us Image<br>Upload in Admin</span>
                     </div>
                 </div>
-                <div class="shoppaton-about-content shoppaton-animate animate-on-scroll shoppaton-fade-in-right">
-                    <h2>Why Choose Shoppaton?</h2>
+                
+                <!-- Content below -->
+                <div class="shoppaton-about-content shoppaton-animate animate-on-scroll shoppaton-fade-in-up">
+                    <h2 style="margin-bottom: 20px;">Why Choose Shoppaton?</h2>
                     <p style="margin-bottom: 20px;">
                         At Shoppaton Store, we believe everyone deserves to feel confident in their skin. 
                         Since our founding in <strong>2022</strong>, we've been on a mission to bring premium, 
@@ -45,7 +48,7 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
                         We carefully curate our collection, selecting only products that deliver real results. 
                         Our team of skincare enthusiasts personally tests every product before adding it to our store.
                     </p>
-                    <ul class="shoppaton-about-list">
+                    <ul class="shoppaton-about-list" style="display: inline-block; text-align: left;">
                         <li>100% Authentic & Original Products</li>
                         <li>Expert Skincare Recommendations</li>
                         <li>Fast & Reliable Delivery Across Nigeria</li>

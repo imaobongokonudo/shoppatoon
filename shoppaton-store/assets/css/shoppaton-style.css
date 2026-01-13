@@ -2102,3 +2102,64 @@ main > *:last-child,
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
+/* About Section Improved Mobile Styles */
+.shoppaton-about-image-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.shoppaton-about-image-container .shoppaton-image-placeholder {
+    max-width: 100%;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    /* Homepage About Section Mobile */
+    .shoppaton-section[data-section="About"] .shoppaton-container {
+        padding: 0 15px !important;
+        max-width: 100% !important;
+    }
+    
+    .shoppaton-about-image-container {
+        padding: 0 10px !important;
+        max-width: 100% !important;
+    }
+    
+    .shoppaton-about-content {
+        padding: 0 15px !important;
+    }
+    
+    .shoppaton-about-list {
+        padding-left: 20px;
+    }
+    
+    /* About Page Mobile */
+    .shoppaton-about-page {
+        padding: 100px 15px 80px !important;
+    }
+    
+    .shoppaton-about-page .shoppaton-container {
+        padding: 0 5px !important;
+    }
+    
+    .shoppaton-about-page .shoppaton-page-header {
+        padding: 0 5px !important;
+    }
+    
+    .shoppaton-about-page .shoppaton-about-image {
+        margin-bottom: 30px !important;
+        padding: 0 5px !important;
+    }
+    
+    .shoppaton-about-page .shoppaton-about-content {
+        padding: 0 5px !important;
+    }
+    
+    /* Ensure all images fit */
+    .shoppaton-image-placeholder {
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
