@@ -14,8 +14,8 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/header.php'; ?>
 
-<div class="shoppaton-about-page" style="padding-top: 120px; padding-bottom: 80px; min-height: 100vh;">
-    <div class="shoppaton-container">
+<div class="shoppaton-about-page" style="padding-top: 120px; padding-bottom: 80px; min-height: 100vh; padding-left: 15px; padding-right: 15px;">
+    <div class="shoppaton-container" style="max-width: 100%; overflow-x: hidden;">
         <!-- Page Header -->
         <div class="shoppaton-page-header" style="text-align: center; margin-bottom: 60px;">
             <span class="shoppaton-section-subtitle">Our Story</span>
@@ -28,9 +28,9 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
 
         <!-- About Section -->
         <section class="shoppaton-section" style="padding-top: 0;">
-            <div class="shoppaton-about-grid">
-                <div class="shoppaton-about-image shoppaton-animate animate-on-scroll shoppaton-fade-in-left">
-                    <div class="shoppaton-image-placeholder" style="aspect-ratio: 4/3;">
+            <div class="shoppaton-about-grid" style="max-width: 100%; overflow-x: hidden;">
+                <div class="shoppaton-about-image shoppaton-animate animate-on-scroll shoppaton-fade-in-left" style="max-width: 100%;">
+                    <div class="shoppaton-image-placeholder" style="aspect-ratio: 4/3; max-width: 100%;">
                         <span>About Us Image<br>Upload in Admin</span>
                     </div>
                 </div>

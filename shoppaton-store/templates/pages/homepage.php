@@ -28,10 +28,10 @@ $categories = $wpdb->get_results("SELECT * FROM {$categories_table} ORDER BY nam
 
 <!-- About Section -->
 <section class="shoppaton-section" data-section="About">
-    <div class="shoppaton-container">
-        <div class="shoppaton-about-grid">
-            <div class="shoppaton-about-image shoppaton-animate animate-on-scroll shoppaton-fade-in-left">
-                <div class="shoppaton-image-placeholder" style="aspect-ratio: 4/3;">
+    <div class="shoppaton-container" style="max-width: 100%; overflow-x: hidden; padding: 0 15px;">
+        <div class="shoppaton-about-grid" style="max-width: 100%; overflow-x: hidden;">
+            <div class="shoppaton-about-image shoppaton-animate animate-on-scroll shoppaton-fade-in-left" style="max-width: 100%;">
+                <div class="shoppaton-image-placeholder" style="aspect-ratio: 4/3; max-width: 100%;">
                     <span>About Us Image<br>Upload in Admin</span>
                 </div>
             </div>

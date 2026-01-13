@@ -1607,6 +1607,25 @@ main > *:last-child,
 
     .shoppaton-about-grid {
         grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 0 15px;
+    }
+    
+    .shoppaton-about-image {
+        padding: 10px;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .shoppaton-about-image .shoppaton-image-placeholder {
+        max-width: 100% !important;
+        width: 100% !important;
+        aspect-ratio: 4/3;
+    }
+    
+    .shoppaton-about-content {
+        padding: 0 10px;
     }
 
     .shoppaton-cart-layout {
@@ -1699,6 +1718,73 @@ main > *:last-child,
     .shoppaton-whatsapp-widget {
         bottom: 85px;
         right: 15px;
+    }
+    
+    /* About Page Mobile Fixes */
+    .shoppaton-about-page {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    
+    .shoppaton-about-page .shoppaton-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+    
+    .shoppaton-about-page .shoppaton-section {
+        padding: 40px 0 !important;
+    }
+    
+    .shoppaton-about-page .shoppaton-about-grid {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+        padding: 0 !important;
+    }
+    
+    .shoppaton-about-page .shoppaton-about-image {
+        padding: 10px !important;
+        max-width: 100% !important;
+    }
+    
+    .shoppaton-about-page .shoppaton-image-placeholder {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    
+    /* Journey Timeline Mobile */
+    .shoppaton-about-page section[style*="60px 40px"] {
+        padding: 40px 15px !important;
+    }
+    
+    /* Our Values Cards Mobile */
+    .shoppaton-about-page .shoppaton-glass-card {
+        padding: 25px 15px !important;
+    }
+    
+    /* About Section on Homepage Mobile */
+    .shoppaton-section[data-section="About"] {
+        padding: 40px 15px !important;
+    }
+    
+    .shoppaton-section[data-section="About"] .shoppaton-about-grid {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+        padding: 0 !important;
+    }
+    
+    .shoppaton-section[data-section="About"] .shoppaton-about-image {
+        padding: 10px !important;
+        margin: 0 auto !important;
+        max-width: 100% !important;
+    }
+    
+    .shoppaton-section[data-section="About"] .shoppaton-image-placeholder {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    
+    .shoppaton-section[data-section="About"] .shoppaton-about-content {
+        padding: 0 10px !important;
     }
     
     /* Fix all sections to prevent overflow */
