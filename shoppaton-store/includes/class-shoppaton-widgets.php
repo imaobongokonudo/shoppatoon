@@ -70,84 +70,153 @@ class Shoppaton_Widgets {
     private function render_scroll_to_top() {
         ?>
         <style>
-        /* Scroll to Top - Clean Circle with Gold Arrow and Glow */
-        .shoppaton-scroll-top {
+        /* Scroll to Top - Perfect Circle with Gold Arrow and Progress Ring */
+        .shoppaton-scroll-top-container {
             position: fixed;
-            bottom: 25px;
-            left: 20px;
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(20, 20, 20, 0.95));
-            border: 2px solid #D4AF37;
-            border-radius: 50%;
-            cursor: pointer;
+            bottom: 30px;
+            left: 25px;
             z-index: 999;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4), inset 0 0 8px rgba(212, 175, 55, 0.1);
         }
-        .shoppaton-scroll-top.visible {
+        .shoppaton-scroll-top-container.visible {
             opacity: 1;
             visibility: visible;
         }
-        .shoppaton-scroll-top:hover {
-            background: linear-gradient(135deg, #D4AF37, #B8860B);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), 0 0 40px rgba(212, 175, 55, 0.3);
-            transform: translateY(-3px) scale(1.05);
+        .shoppaton-scroll-top {
+            width: 50px;
+            height: 50px;
+            background: rgba(10, 10, 10, 0.9);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
         }
-        .shoppaton-scroll-top:hover .scroll-arrow {
-            stroke: #0a0a0a;
+        .shoppaton-scroll-top:hover {
+            background: rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.7), 0 0 50px rgba(212, 175, 55, 0.4);
+            transform: translateY(-3px);
+        }
+        .shoppaton-scroll-top:hover .scroll-arrow-icon {
+            stroke: #fff;
+        }
+        /* Progress ring SVG */
+        .scroll-progress-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            transform: rotate(-90deg);
+        }
+        .scroll-progress-ring-bg {
+            fill: none;
+            stroke: rgba(212, 175, 55, 0.2);
+            stroke-width: 3;
+        }
+        .scroll-progress-ring-bar {
+            fill: none;
+            stroke: #D4AF37;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 141.37;
+            stroke-dashoffset: 141.37;
+            transition: stroke-dashoffset 0.1s ease;
+            filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.8));
         }
         /* Arrow Icon - Sparkling Gold */
-        .scroll-arrow {
-            width: 14px;
-            height: 14px;
+        .scroll-arrow-icon {
+            width: 20px;
+            height: 20px;
             stroke: #D4AF37;
-            stroke-width: 2.5;
+            stroke-width: 3;
             fill: none;
             transition: stroke 0.3s;
-            filter: drop-shadow(0 0 2px rgba(212, 175, 55, 0.6));
+            filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.6));
+            position: relative;
+            z-index: 2;
         }
         @media (max-width: 768px) {
-            .shoppaton-scroll-top {
-                bottom: 80px;
-                width: 32px;
-                height: 32px;
+            .shoppaton-scroll-top-container {
+                bottom: 85px;
+                left: 15px;
             }
-            .scroll-arrow {
-                width: 12px;
-                height: 12px;
+            .shoppaton-scroll-top {
+                width: 40px;
+                height: 40px;
+            }
+            .scroll-progress-ring {
+                width: 40px;
+                height: 40px;
+            }
+            .scroll-progress-ring-bg,
+            .scroll-progress-ring-bar {
+                stroke-width: 2.5;
+            }
+            .scroll-progress-ring-bar {
+                stroke-dasharray: 113.1;
+                stroke-dashoffset: 113.1;
+            }
+            .scroll-arrow-icon {
+                width: 16px;
+                height: 16px;
             }
         }
         </style>
-        <button class="shoppaton-scroll-top" aria-label="Scroll to top">
-            <svg class="scroll-arrow" viewBox="0 0 24 24">
-                <polyline points="18 15 12 9 6 15"/>
-            </svg>
-        </button>
+        <div class="shoppaton-scroll-top-container">
+            <button class="shoppaton-scroll-top" aria-label="Scroll to top">
+                <svg class="scroll-progress-ring" viewBox="0 0 50 50">
+                    <circle class="scroll-progress-ring-bg" cx="25" cy="25" r="22.5"/>
+                    <circle class="scroll-progress-ring-bar" cx="25" cy="25" r="22.5"/>
+                </svg>
+                <svg class="scroll-arrow-icon" viewBox="0 0 24 24">
+                    <polyline points="18 15 12 9 6 15"/>
+                </svg>
+            </button>
+        </div>
         <script>
         (function() {
+            var container = document.querySelector('.shoppaton-scroll-top-container');
             var btn = document.querySelector('.shoppaton-scroll-top');
-            if (!btn) return;
+            var progressBar = document.querySelector('.scroll-progress-ring-bar');
+            if (!container || !btn || !progressBar) return;
             
-            function updateVisibility() {
+            var isMobile = window.innerWidth <= 768;
+            var circumference = isMobile ? 113.1 : 141.37;
+            
+            function updateScrollProgress() {
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                var scrollPercent = docHeight > 0 ? (scrollTop / docHeight) : 0;
+                
+                // Update visibility
                 if (scrollTop > 300) {
-                    btn.classList.add('visible');
+                    container.classList.add('visible');
                 } else {
-                    btn.classList.remove('visible');
+                    container.classList.remove('visible');
                 }
+                
+                // Update progress ring
+                var offset = circumference - (scrollPercent * circumference);
+                progressBar.style.strokeDashoffset = offset;
             }
             
-            window.addEventListener('scroll', updateVisibility);
+            window.addEventListener('scroll', updateScrollProgress);
+            window.addEventListener('resize', function() {
+                isMobile = window.innerWidth <= 768;
+                circumference = isMobile ? 113.1 : 141.37;
+                updateScrollProgress();
+            });
             btn.addEventListener('click', function() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
-            updateVisibility();
+            updateScrollProgress();
         })();
         </script>
         <?php

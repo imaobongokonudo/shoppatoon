@@ -1278,37 +1278,37 @@ main > *:last-child,
     border-radius: 0 0 5px 5px;
 }
 
-/* WhatsApp Widget - Smaller */
+/* WhatsApp Widget - Desktop Larger Size */
 .shoppaton-whatsapp-widget {
     position: fixed;
-    bottom: 100px;
-    right: 15px;
+    bottom: 30px;
+    right: 25px;
     z-index: 999;
 }
 
 .shoppaton-whatsapp-btn {
-    width: 36px;
-    height: 36px;
+    width: 50px;
+    height: 50px;
     background: #25D366;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 18px;
-    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    font-size: 22px;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
     transition: var(--transition-normal);
     animation: pulse 2s infinite;
 }
 
 .shoppaton-whatsapp-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 26px;
+    height: 26px;
 }
 
 .shoppaton-whatsapp-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+    box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
 }
 
 @keyframes pulse {
@@ -1320,58 +1320,9 @@ main > *:last-child,
     }
 }
 
-/* Scroll to Top - Smaller Single Circle with Gold Arrow */
-.shoppaton-scroll-top {
-    position: fixed;
-    bottom: 100px;
-    left: 15px;
-    z-index: 999;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(10, 10, 10, 0.9);
-    border: 2px solid var(--shoppaton-gold);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: var(--transition-normal);
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-}
-
-.shoppaton-scroll-top.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.shoppaton-scroll-top:hover {
-    background: var(--shoppaton-gold);
-}
-
-.shoppaton-scroll-top:hover .shoppaton-scroll-arrow {
-    color: var(--shoppaton-black);
-}
-
-.shoppaton-scroll-progress-ring {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-}
-
-.shoppaton-scroll-progress-ring .progress-bar {
-    transition: stroke-dashoffset 0.15s ease-out;
-    stroke-linecap: round;
-}
-
-.shoppaton-scroll-arrow {
-    color: var(--shoppaton-gold);
-    z-index: 1;
-    transition: var(--transition-fast);
-    width: 14px;
-    height: 14px;
+/* Scroll to Top - CSS placeholder - actual styles inline */
+.shoppaton-scroll-top-container {
+    /* Styles defined inline in widget */
 }
 
 /* Cart Page */
@@ -1746,7 +1697,8 @@ main > *:last-child,
     }
 
     .shoppaton-whatsapp-widget {
-        bottom: 90px;
+        bottom: 85px;
+        right: 15px;
     }
     
     /* Fix all sections to prevent overflow */
@@ -2022,14 +1974,18 @@ main > *:last-child,
         height: 44px !important;
     }
     
-    /* WhatsApp widget smaller on mobile */
+    /* WhatsApp widget on mobile - proper size */
+    .shoppaton-whatsapp-widget {
+        bottom: 85px !important;
+        right: 15px !important;
+    }
     .shoppaton-whatsapp-widget .shoppaton-whatsapp-btn {
-        width: 32px !important;
-        height: 32px !important;
+        width: 40px !important;
+        height: 40px !important;
     }
     .shoppaton-whatsapp-widget .shoppaton-whatsapp-btn svg {
-        width: 18px !important;
-        height: 18px !important;
+        width: 22px !important;
+        height: 22px !important;
     }
     
     /* Categories grid mobile */
