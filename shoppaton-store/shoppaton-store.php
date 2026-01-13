@@ -96,7 +96,8 @@ final class Shoppaton_Store {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_assets'));
         add_action('wp_head', array($this, 'add_preconnects'));
         add_action('wp_footer', array($this, 'render_widgets'));
-        add_action('wp_body_open', array($this, 'render_mobile_nav'));
+        add_action('wp_footer', array($this, 'render_mobile_nav'), 99);
+        add_action('wp_footer', array($this, 'render_pwa_install'), 100);
     }
 
     /**
@@ -493,9 +494,8 @@ final class Shoppaton_Store {
      * Render mobile navigation
      */
     public function render_mobile_nav() {
-        if (wp_is_mobile()) {
-            include SHOPPATON_PLUGIN_DIR . 'templates/partials/mobile-nav.php';
-        }
+        // Always render mobile nav - CSS will handle visibility
+        include SHOPPATON_PLUGIN_DIR . 'templates/partials/mobile-nav.php';
     }
 
     /**
@@ -506,6 +506,142 @@ final class Shoppaton_Store {
             return sanitize_text_field($_SESSION['shoppaton_session_id']);
         }
         return '';
+    }
+
+    /**
+     * Render PWA install prompt
+     */
+    public function render_pwa_install() {
+        ?>
+        <!-- PWA Install Prompt -->
+        <div id="shoppaton-pwa-install" class="shoppaton-pwa-install" style="display: none;">
+            <div class="shoppaton-pwa-content">
+                <button class="shoppaton-pwa-close" onclick="closePWAInstall()">&times;</button>
+                <div class="shoppaton-pwa-icon">
+                    <img src="<?php echo esc_url(SHOPPATON_ASSETS_URL . 'images/logo.png'); ?>" alt="Shoppaton" style="width: 50px; height: 50px; border-radius: 10px;">
+                </div>
+                <div class="shoppaton-pwa-text">
+                    <h4 style="margin: 0 0 5px; color: var(--shoppaton-gold); font-size: 14px;">Install Shoppaton App</h4>
+                    <p style="margin: 0; font-size: 11px; color: var(--shoppaton-text-muted);" id="pwa-instruction">Add to home screen for the best experience</p>
+                </div>
+                <button class="shoppaton-btn shoppaton-btn-primary shoppaton-btn-sm" onclick="installPWA()">Install</button>
+            </div>
+        </div>
+        <style>
+        .shoppaton-pwa-install {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--shoppaton-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--shoppaton-glass-border);
+            border-radius: 12px;
+            padding: 12px 15px;
+            z-index: 9999;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 340px;
+            width: calc(100% - 30px);
+        }
+        .shoppaton-pwa-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .shoppaton-pwa-close {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            background: none;
+            border: none;
+            color: var(--shoppaton-text-muted);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        .shoppaton-pwa-text { flex: 1; }
+        @media (min-width: 769px) {
+            .shoppaton-pwa-install { bottom: 25px; }
+        }
+        </style>
+        <script>
+        let deferredPrompt;
+        const pwaInstall = document.getElementById('shoppaton-pwa-install');
+        const pwaInstruction = document.getElementById('pwa-instruction');
+        
+        // Detect browser and show instructions
+        function detectBrowser() {
+            const ua = navigator.userAgent;
+            if (/iPad|iPhone|iPod/.test(ua)) {
+                return 'ios';
+            } else if (/Android/.test(ua)) {
+                return 'android';
+            } else if (/Chrome/.test(ua)) {
+                return 'chrome';
+            } else if (/Firefox/.test(ua)) {
+                return 'firefox';
+            } else if (/Safari/.test(ua)) {
+                return 'safari';
+            }
+            return 'other';
+        }
+        
+        function showPWAInstall() {
+            const browser = detectBrowser();
+            const dismissed = localStorage.getItem('pwa_dismissed');
+            const installed = localStorage.getItem('pwa_installed');
+            
+            if (dismissed || installed) return;
+            
+            if (browser === 'ios') {
+                pwaInstruction.innerHTML = 'Tap <svg style="width:14px;height:14px;vertical-align:middle" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l4 4h-3v9h-2V6H8l4-4zm6 9v9H6v-9H4v9c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-9h-2z"/></svg> then "Add to Home Screen"';
+                pwaInstall.style.display = 'block';
+            } else if (browser === 'safari') {
+                pwaInstruction.innerHTML = 'Click Share then "Add to Dock"';
+                pwaInstall.style.display = 'block';
+            } else if (deferredPrompt || browser === 'android' || browser === 'chrome') {
+                pwaInstruction.textContent = 'Install for offline access & faster loading';
+                pwaInstall.style.display = 'block';
+            }
+        }
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showPWAInstall();
+        });
+        
+        window.addEventListener('appinstalled', () => {
+            localStorage.setItem('pwa_installed', 'true');
+            pwaInstall.style.display = 'none';
+        });
+        
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choice) => {
+                    if (choice.outcome === 'accepted') {
+                        localStorage.setItem('pwa_installed', 'true');
+                    }
+                    deferredPrompt = null;
+                    pwaInstall.style.display = 'none';
+                });
+            } else {
+                // For iOS/Safari - just close the prompt
+                closePWAInstall();
+            }
+        }
+        
+        function closePWAInstall() {
+            pwaInstall.style.display = 'none';
+            localStorage.setItem('pwa_dismissed', Date.now());
+        }
+        
+        // Show after 3 seconds
+        setTimeout(showPWAInstall, 3000);
+        </script>
+        <?php
     }
 }
 

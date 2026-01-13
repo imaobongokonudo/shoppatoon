@@ -101,17 +101,32 @@ h1, h2, h3, h4, h5, h6 {
     background-clip: text;
 }
 
-h1 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
-h2 { font-size: clamp(1.25rem, 3vw, 1.85rem); }
-h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); }
-h4 { font-size: clamp(1rem, 1.5vw, 1.2rem); }
-h5 { font-size: 0.95rem; }
-h6 { font-size: 0.85rem; }
+/* Reduced font sizes for all pages */
+h1 { font-size: clamp(1.2rem, 2.5vw, 1.75rem); }
+h2 { font-size: clamp(1rem, 2vw, 1.4rem); }
+h3 { font-size: clamp(0.9rem, 1.5vw, 1.15rem); }
+h4 { font-size: clamp(0.85rem, 1.25vw, 1rem); }
+h5 { font-size: 0.8rem; }
+h6 { font-size: 0.75rem; }
 
 p {
     color: var(--shoppaton-text);
-    margin-bottom: 0.85rem;
-    font-size: 0.8rem;
+    margin-bottom: 0.7rem;
+    font-size: 0.75rem;
+}
+
+/* Hide WordPress page titles - full width Elementor pattern */
+.page-title,
+.entry-title,
+.page-header,
+.entry-header,
+article.page > header,
+.hentry > header h1,
+.single .entry-title,
+.page .entry-title,
+body.page .content-area header,
+body.page article header h1 {
+    display: none !important;
 }
 
 a {
@@ -1001,9 +1016,9 @@ body.shoppaton-has-header {
 }
 
 .shoppaton-footer-logo img {
-    height: 60px;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.5));
+    height: 45px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
 }
 
 .shoppaton-footer-desc {
