@@ -27,7 +27,7 @@ $saved_addresses = $user ? Shoppaton_User::instance()->get_saved_addresses($user
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/header.php'; ?>
 
-<div class="shoppaton-checkout-page" style="padding-top: 120px; min-height: 100vh;">
+<div class="shoppaton-checkout-page" style="padding-top: 120px; padding-bottom: 80px; min-height: 100vh;">
     <div class="shoppaton-container">
         <h1 class="shoppaton-gold-text-animated" style="text-align: center; margin-bottom: 40px;">Checkout</h1>
 

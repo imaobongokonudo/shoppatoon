@@ -18,7 +18,7 @@ $total = $subtotal + $shipping;
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/header.php'; ?>
 
-<div class="shoppaton-cart-page">
+<div class="shoppaton-cart-page" style="padding-top: 100px; padding-bottom: 80px; min-height: 100vh;">
     <div class="shoppaton-container">
         <h1 class="shoppaton-gold-text-animated" style="text-align: center; margin-bottom: 40px;">Shopping Cart</h1>
 

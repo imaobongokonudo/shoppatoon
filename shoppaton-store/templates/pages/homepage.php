@@ -210,7 +210,7 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
 </section>
 
 <!-- Contact Section -->
-<section class="shoppaton-section" data-section="Contact" style="background: var(--shoppaton-glass);">
+<section class="shoppaton-section" data-section="Contact" style="background: var(--shoppaton-glass); margin-bottom: 80px;">
     <div class="shoppaton-container">
         <div class="shoppaton-section-header">
             <span class="shoppaton-section-subtitle">Get In Touch</span>

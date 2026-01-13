@@ -14,7 +14,7 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/header.php'; ?>
 
-<div class="shoppaton-about-page" style="padding-top: 120px; min-height: 100vh;">
+<div class="shoppaton-about-page" style="padding-top: 120px; padding-bottom: 80px; min-height: 100vh;">
     <div class="shoppaton-container">
         <!-- Page Header -->
         <div class="shoppaton-page-header" style="text-align: center; margin-bottom: 60px;">

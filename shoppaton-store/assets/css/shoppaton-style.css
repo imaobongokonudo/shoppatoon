@@ -1021,12 +1021,45 @@ body.shoppaton-has-header {
     font-size: 18px;
 }
 
+/* Page Content Spacing Before Footer */
+.shoppaton-page > *:last-child,
+.shoppaton-content > *:last-child,
+.shoppaton-wrapper > *:last-child,
+.shoppaton-section:last-of-type,
+main > *:last-child,
+.site-content > *:last-child,
+.entry-content > *:last-child,
+.page-content > *:last-child {
+    margin-bottom: 80px !important;
+}
+
+/* Ensure sections have padding */
+.shoppaton-section,
+.shoppaton-about-section,
+.shoppaton-track-section,
+.shoppaton-faq-section,
+.shoppaton-shipping-section,
+.shoppaton-cart-section,
+.shoppaton-checkout-section,
+.shoppaton-shop-section,
+.shoppaton-wishlist-section,
+.shoppaton-dashboard-section {
+    padding-bottom: 60px;
+}
+
+/* Last section before footer gets extra spacing */
+.shoppaton-homepage > section:last-of-type,
+.shoppaton-page-content > section:last-of-type {
+    margin-bottom: 80px;
+}
+
 /* Footer */
 .shoppaton-footer {
     background: var(--shoppaton-glass);
     backdrop-filter: var(--glass-blur);
     border-top: 1px solid var(--shoppaton-glass-border);
     padding: 80px 0 30px;
+    margin-top: 60px;
 }
 
 .shoppaton-footer-grid {

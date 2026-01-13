@@ -15,7 +15,7 @@ $active_form = isset($_GET['action']) && $_GET['action'] === 'register' ? 'regis
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/header.php'; ?>
 
-<div class="shoppaton-auth-page" style="padding-top: 120px; min-height: 100vh; display: flex; align-items: center;">
+<div class="shoppaton-auth-page" style="padding-top: 120px; padding-bottom: 80px; min-height: 100vh; display: flex; align-items: center;">
     <div class="shoppaton-container">
         <div class="shoppaton-auth-wrapper" style="max-width: 450px; margin: 0 auto;">
             <div class="shoppaton-glass-card" style="padding: 40px;">

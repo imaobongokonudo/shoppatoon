@@ -21,7 +21,7 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'orders'
 
 <?php include SHOPPATON_PLUGIN_DIR . 'templates/partials/header.php'; ?>
 
-<div class="shoppaton-dashboard-page" style="padding-top: 120px; min-height: 100vh;">
+<div class="shoppaton-dashboard-page" style="padding-top: 120px; padding-bottom: 80px; min-height: 100vh;">
     <div class="shoppaton-container">
         <!-- Dashboard Header -->
         <div class="shoppaton-dashboard-header" style="margin-bottom: 40px;">
