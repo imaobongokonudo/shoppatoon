@@ -149,6 +149,7 @@ final class Shoppaton_Store {
             skin_type varchar(255) DEFAULT NULL,
             target_user varchar(255) DEFAULT NULL,
             usage_guide longtext,
+            usage_guide_image varchar(500) DEFAULT NULL,
             featured tinyint(1) DEFAULT 0,
             best_seller tinyint(1) DEFAULT 0,
             status varchar(20) DEFAULT 'publish',

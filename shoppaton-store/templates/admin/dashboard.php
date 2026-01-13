@@ -795,6 +795,10 @@ $logo_url = SHOPPATON_ASSETS_URL . 'images/logo.png';
                     
                     <div class="shoppaton-form-group">
                         <label class="shoppaton-form-label">Usage Guide Image</label>
+                        <div id="usage-guide-image-preview" style="width: 100%; max-width: 200px; height: 100px; border: 2px dashed var(--shoppaton-glass-border); border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center; margin-bottom: 10px; overflow: hidden;">
+                            <span style="color: var(--shoppaton-text-muted); font-size: 11px; text-align: center;">No Guide Image</span>
+                        </div>
+                        <input type="hidden" name="usage_guide_image" id="product-usage-guide-image">
                         <button type="button" class="shoppaton-btn shoppaton-btn-secondary shoppaton-upload-guide-image" style="width: 100%;">
                             Upload Guide Image
                         </button>
@@ -1513,6 +1517,40 @@ jQuery(document).ready(function($) {
         }
     });
     
+    // Usage guide image upload
+    $('.shoppaton-upload-guide-image').on('click', function(e) {
+        e.preventDefault();
+        
+        if (typeof wp !== 'undefined' && wp.media) {
+            var mediaUploader = wp.media({
+                title: 'Select Usage Guide Image',
+                button: {
+                    text: 'Use This Image'
+                },
+                multiple: false
+            });
+            
+            mediaUploader.on('select', function() {
+                var attachment = mediaUploader.state().get('selection').first().toJSON();
+                $('#product-usage-guide-image').val(attachment.url);
+                $('#usage-guide-image-preview').html(
+                    '<img src="' + attachment.url + '" style="width: 100%; height: 100%; object-fit: cover;">'
+                );
+            });
+            
+            mediaUploader.open();
+        } else {
+            // Fallback: prompt for image URL
+            var imageUrl = prompt('Enter usage guide image URL:');
+            if (imageUrl) {
+                $('#product-usage-guide-image').val(imageUrl);
+                $('#usage-guide-image-preview').html(
+                    '<img src="' + imageUrl + '" style="width: 100%; height: 100%; object-fit: cover;">'
+                );
+            }
+        }
+    });
+    
     // Remove product image
     $(document).on('click', '.remove-product-image', function() {
         $(this).closest('.product-image-item').remove();
@@ -1522,6 +1560,8 @@ jQuery(document).ready(function($) {
     $('#add-new-product').on('click', function() {
         productImages = [];
         $('#product-images-preview').empty();
+        $('#usage-guide-image-preview').html('<span style="color: var(--shoppaton-text-muted); font-size: 11px; text-align: center;">No Guide Image</span>');
+        $('#product-usage-guide-image').val('');
     });
 });
 </script>

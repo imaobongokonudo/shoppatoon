@@ -57,7 +57,7 @@ class Shoppaton_Products {
     public function get($id) {
         global $wpdb;
         $product = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$this->table} WHERE id = %d AND status = 'publish'",
+            "SELECT * FROM {$this->table} WHERE id = %d",
             $id
         ));
 
@@ -69,6 +69,16 @@ class Shoppaton_Products {
     }
 
     /**
+     * Alias for get() method
+     *
+     * @param int $id Product ID
+     * @return object|null
+     */
+    public function get_product($id) {
+        return $this->get($id);
+    }
+
+    /**
      * Get product by slug
      *
      * @param string $slug Product slug
@@ -77,7 +87,7 @@ class Shoppaton_Products {
     public function get_by_slug($slug) {
         global $wpdb;
         $product = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$this->table} WHERE slug = %s AND status = 'publish'",
+            "SELECT * FROM {$this->table} WHERE slug = %s",
             $slug
         ));
 
@@ -488,12 +498,36 @@ class Shoppaton_Products {
             return '';
         }
 
-        $shop_page = get_page_by_path('shop');
-        if ($shop_page) {
-            return get_permalink($shop_page) . $product->slug . '/';
+        // Check if there's a page with the shoppaton_product shortcode
+        $product_page = get_page_by_path('product');
+        if ($product_page) {
+            return get_permalink($product_page) . '?product_id=' . $product->id;
         }
 
-        return home_url('/shop/' . $product->slug . '/');
+        return home_url('/?shoppaton_page=product&product_id=' . $product->id);
+    }
+
+    /**
+     * Get all product images
+     *
+     * @param object $product Product object
+     * @return array
+     */
+    public function get_product_images($product) {
+        if (!empty($product->images) && is_array($product->images)) {
+            return $product->images;
+        }
+        
+        // Try to decode if it's a JSON string
+        if (!empty($product->images) && is_string($product->images)) {
+            $images = json_decode($product->images, true);
+            if (is_array($images) && !empty($images)) {
+                return $images;
+            }
+        }
+
+        // Return array with placeholder
+        return array(SHOPPATON_ASSETS_URL . 'images/placeholder-product.png');
     }
 
     /**
@@ -506,6 +540,14 @@ class Shoppaton_Products {
     public function get_product_image($product, $size = 'medium') {
         if (!empty($product->images) && is_array($product->images) && isset($product->images[0])) {
             return esc_url($product->images[0]);
+        }
+        
+        // Try to decode if it's a JSON string
+        if (!empty($product->images) && is_string($product->images)) {
+            $images = json_decode($product->images, true);
+            if (is_array($images) && isset($images[0])) {
+                return esc_url($images[0]);
+            }
         }
 
         return SHOPPATON_ASSETS_URL . 'images/placeholder-product.png';

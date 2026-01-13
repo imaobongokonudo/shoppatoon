@@ -1552,8 +1552,9 @@ class Shoppaton_Admin {
             'category_id' => intval($product_data['category'] ?? 0) ?: null,
             'skin_type' => sanitize_text_field($product_data['skin_type'] ?? ''),
             'target_user' => sanitize_text_field($product_data['target_user'] ?? ''),
+            'usage_guide_image' => esc_url_raw($product_data['usage_guide_image'] ?? ''),
             'status' => ($product_data['status'] ?? 'active') === 'active' ? 'publish' : 'draft',
-            'images' => maybe_serialize($images),
+            'images' => wp_json_encode($images),
         );
 
         // Validate required fields
