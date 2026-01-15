@@ -299,6 +299,16 @@
                 });
             },
 
+            // Helper function to parse currency text to number
+            parsePrice: function(text) {
+                return parseFloat(String(text).replace(/[₦,]/g, '')) || 0;
+            },
+
+            // Helper function to format number as currency
+            formatPrice: function(num) {
+                return '₦' + num.toLocaleString('en-NG', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            },
+
             bindEvents: function() {
                 const self = this;
 
@@ -332,14 +342,27 @@
                         value--;
                     }
                     
-                    input.val(value).trigger('change');
+                    input.val(value).trigger('input');
                 });
 
-                // Quantity change
-                $(document).on('change', '.shoppaton-cart-item .shoppaton-quantity-input', function() {
-                    const productId = $(this).closest('.shoppaton-cart-item').data('product-id');
-                    const quantity = parseInt($(this).val()) || 1;
-                    self.updateItem(productId, quantity);
+                // Quantity change - trigger on input for immediate update
+                $(document).on('input change', '.shoppaton-cart-item .shoppaton-quantity-input', function() {
+                    const $input = $(this);
+                    const productId = $input.closest('.shoppaton-cart-item').data('product-id');
+                    const quantity = parseInt($input.val()) || 1;
+                    
+                    // Update local display immediately
+                    self.updateLocalDisplay($input, quantity);
+                    
+                    // Debounce server update using data attribute for per-input timeout
+                    const existingTimeout = $input.data('updateTimeout');
+                    if (existingTimeout) {
+                        clearTimeout(existingTimeout);
+                    }
+                    const newTimeout = setTimeout(function() {
+                        self.updateItem(productId, quantity);
+                    }, 300);
+                    $input.data('updateTimeout', newTimeout);
                 });
 
                 // Remove item
@@ -388,6 +411,36 @@
                         Shoppaton.toast('Added to cart (will sync when online)', 'success');
                     }
                 });
+            },
+
+            // Update local display immediately without waiting for server
+            updateLocalDisplay: function($input, quantity) {
+                const self = this;
+                const $cartItem = $input.closest('.shoppaton-cart-item');
+                const priceText = $cartItem.find('.shoppaton-cart-item-price').text();
+                const price = self.parsePrice(priceText);
+                const itemTotal = price * quantity;
+                
+                // Update item total using class selector
+                $cartItem.find('.shoppaton-item-total').text(self.formatPrice(itemTotal));
+                
+                // Calculate new cart totals
+                let subtotal = 0;
+                $('.shoppaton-cart-item').each(function() {
+                    const itemPriceText = $(this).find('.shoppaton-cart-item-price').text();
+                    const itemPrice = self.parsePrice(itemPriceText);
+                    const itemQty = parseInt($(this).find('.shoppaton-quantity-input').val()) || 1;
+                    subtotal += itemPrice * itemQty;
+                });
+                
+                // Update subtotal
+                $('#cart-subtotal').text(self.formatPrice(subtotal));
+                
+                // Update total (subtotal + shipping)
+                const shippingText = $('#cart-shipping').text();
+                const shipping = self.parsePrice(shippingText);
+                const total = subtotal + shipping;
+                $('#cart-total').text(self.formatPrice(total));
             },
 
             updateItem: function(productId, quantity) {

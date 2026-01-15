@@ -49,8 +49,8 @@ $total = $subtotal + $shipping;
                         <button class="shoppaton-quantity-btn plus">+</button>
                     </div>
                     
-                    <div style="text-align: right;">
-                        <strong style="color: var(--shoppaton-gold);"><?php echo esc_html(Shoppaton_Settings::format_price($item['price'] * $item['quantity'])); ?></strong>
+                    <div class="shoppaton-cart-item-total" style="text-align: right;">
+                        <strong class="shoppaton-item-total" style="color: var(--shoppaton-gold);"><?php echo esc_html(Shoppaton_Settings::format_price($item['price'] * $item['quantity'])); ?></strong>
                         <button class="shoppaton-cart-item-remove" title="Remove">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="3 6 5 6 21 6"/>

@@ -121,12 +121,24 @@ class Shoppaton_Products {
             'price_min' => null,
             'price_max' => null,
             'in_stock' => true,
+            'exclude' => null,
         );
 
         $args = wp_parse_args($args, $defaults);
 
         $where = array("status = 'publish'");
         $values = array();
+
+        // Exclude specific product IDs
+        if (!empty($args['exclude'])) {
+            $exclude_ids = is_array($args['exclude']) ? $args['exclude'] : array($args['exclude']);
+            $exclude_ids = array_map('intval', $exclude_ids);
+            if (!empty($exclude_ids)) {
+                $placeholders = implode(',', array_fill(0, count($exclude_ids), '%d'));
+                $where[] = "id NOT IN ({$placeholders})";
+                $values = array_merge($values, $exclude_ids);
+            }
+        }
 
         if ($args['category']) {
             $where[] = "category_id = %d";
