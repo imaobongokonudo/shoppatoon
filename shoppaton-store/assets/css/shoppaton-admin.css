@@ -1,0 +1,563 @@
+/**
+ * Shoppaton Store - Admin Styles
+ *
+ * @package ShoppatonStore
+ */
+
+/* Admin Specific Styles */
+.shoppaton-admin-page {
+    background: var(--shoppaton-black);
+    min-height: 100vh;
+}
+
+/* Admin Sidebar */
+.shoppaton-admin-sidebar {
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+}
+
+.shoppaton-admin-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    color: var(--shoppaton-text-muted);
+    text-decoration: none;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.shoppaton-admin-nav-item:hover {
+    background: var(--shoppaton-glass);
+    color: var(--shoppaton-white);
+}
+
+.shoppaton-admin-nav-item.active {
+    background: var(--shoppaton-gold-gradient);
+    color: var(--shoppaton-black);
+}
+
+/* Admin Tables */
+.shoppaton-admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.shoppaton-admin-table th,
+.shoppaton-admin-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--shoppaton-glass-border);
+}
+
+.shoppaton-admin-table th {
+    color: var(--shoppaton-text-muted);
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.shoppaton-admin-table tbody tr {
+    transition: background 0.3s ease;
+}
+
+.shoppaton-admin-table tbody tr:hover {
+    background: var(--shoppaton-glass);
+}
+
+.shoppaton-admin-table img {
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* Table Responsive */
+.shoppaton-table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Status Badges */
+.shoppaton-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.shoppaton-status-pending,
+.shoppaton-status-active {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.shoppaton-status-processing {
+    background: rgba(33, 150, 243, 0.2);
+    color: #2196f3;
+}
+
+.shoppaton-status-shipped {
+    background: rgba(156, 39, 176, 0.2);
+    color: #9c27b0;
+}
+
+.shoppaton-status-delivered,
+.shoppaton-status-completed {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+}
+
+.shoppaton-status-cancelled,
+.shoppaton-status-inactive {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+}
+
+/* Admin Cards */
+.shoppaton-admin-stat-card {
+    background: var(--shoppaton-glass);
+    border: 1px solid var(--shoppaton-glass-border);
+    border-radius: var(--border-radius-lg);
+    padding: 25px;
+    transition: all 0.3s ease;
+}
+
+.shoppaton-admin-stat-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--shoppaton-gold);
+}
+
+/* Modal Styles */
+.shoppaton-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.shoppaton-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.shoppaton-modal-content {
+    background: var(--shoppaton-black);
+    border-radius: var(--border-radius-xl);
+    border: 1px solid var(--shoppaton-glass-border);
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.shoppaton-modal.active .shoppaton-modal-content {
+    transform: scale(1);
+}
+
+.shoppaton-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--shoppaton-glass-border);
+    position: sticky;
+    top: 0;
+    background: var(--shoppaton-black);
+    z-index: 1;
+}
+
+.shoppaton-modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--shoppaton-white);
+}
+
+.shoppaton-modal-close {
+    background: none;
+    border: none;
+    color: var(--shoppaton-text-muted);
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.3s ease;
+}
+
+.shoppaton-modal-close:hover {
+    color: var(--shoppaton-white);
+}
+
+.shoppaton-modal-body {
+    padding: 25px;
+}
+
+.shoppaton-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding: 20px 25px;
+    border-top: 1px solid var(--shoppaton-glass-border);
+    position: sticky;
+    bottom: 0;
+    background: var(--shoppaton-black);
+}
+
+/* Image Upload Preview */
+.shoppaton-media-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.shoppaton-media-preview-item {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.shoppaton-media-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--shoppaton-glass-border);
+}
+
+.shoppaton-media-preview-item .remove-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.shoppaton-media-preview-item:hover .remove-image {
+    opacity: 1;
+}
+
+/* Drag and Drop Zone */
+.shoppaton-dropzone {
+    border: 2px dashed var(--shoppaton-glass-border);
+    border-radius: var(--border-radius-lg);
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.shoppaton-dropzone:hover,
+.shoppaton-dropzone.dragover {
+    border-color: var(--shoppaton-gold);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.shoppaton-dropzone-text {
+    color: var(--shoppaton-text-muted);
+    font-size: 14px;
+}
+
+.shoppaton-dropzone-text span {
+    color: var(--shoppaton-gold);
+}
+
+/* Pagination */
+.shoppaton-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.shoppaton-pagination-btn {
+    padding: 8px 15px;
+    background: var(--shoppaton-glass);
+    border: 1px solid var(--shoppaton-glass-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--shoppaton-text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.shoppaton-pagination-btn:hover,
+.shoppaton-pagination-btn.active {
+    background: var(--shoppaton-gold);
+    border-color: var(--shoppaton-gold);
+    color: var(--shoppaton-black);
+}
+
+/* Chart Container */
+.shoppaton-chart-container {
+    position: relative;
+    height: 250px;
+}
+
+/* Empty State */
+.shoppaton-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.shoppaton-empty-state-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.shoppaton-empty-state h3 {
+    color: var(--shoppaton-white);
+    margin-bottom: 10px;
+}
+
+.shoppaton-empty-state p {
+    color: var(--shoppaton-text-muted);
+    margin-bottom: 20px;
+}
+
+/* Admin Action Buttons */
+.shoppaton-admin-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.shoppaton-admin-actions .shoppaton-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+/* Inline Edit */
+.shoppaton-inline-edit {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.shoppaton-inline-edit input {
+    flex: 1;
+    padding: 6px 10px;
+    background: var(--shoppaton-glass);
+    border: 1px solid var(--shoppaton-glass-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--shoppaton-text);
+    font-size: 14px;
+}
+
+/* Admin Dashboard Grid */
+.shoppaton-admin-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.shoppaton-admin-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.shoppaton-admin-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.shoppaton-admin-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Admin Form Groups */
+.shoppaton-admin-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.shoppaton-admin-form-row.full-width {
+    grid-template-columns: 1fr;
+}
+
+/* Toggle Switch */
+.shoppaton-toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.shoppaton-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.shoppaton-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--shoppaton-glass);
+    border-radius: 26px;
+    transition: 0.3s;
+}
+
+.shoppaton-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.shoppaton-toggle input:checked + .shoppaton-toggle-slider {
+    background: var(--shoppaton-gold);
+}
+
+.shoppaton-toggle input:checked + .shoppaton-toggle-slider:before {
+    transform: translateX(24px);
+}
+
+/* Notifications Badge */
+.shoppaton-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: #ff6b6b;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+/* Sortable Handle */
+.shoppaton-sortable-handle {
+    cursor: grab;
+    color: var(--shoppaton-text-muted);
+    padding: 10px;
+}
+
+.shoppaton-sortable-handle:active {
+    cursor: grabbing;
+}
+
+/* Loading Spinner */
+.shoppaton-admin-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.shoppaton-admin-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--shoppaton-glass-border);
+    border-top-color: var(--shoppaton-gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Responsive Admin Styles */
+@media (max-width: 1200px) {
+    .shoppaton-admin-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .shoppaton-admin-layout {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .shoppaton-admin-sidebar {
+        position: static;
+        order: 2;
+    }
+    
+    .shoppaton-admin-nav {
+        display: flex;
+        overflow-x: auto;
+        gap: 5px;
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .shoppaton-admin-nav-item {
+        white-space: nowrap;
+        margin-bottom: 0;
+    }
+    
+    .shoppaton-admin-grid-2,
+    .shoppaton-admin-grid-3,
+    .shoppaton-admin-grid-4 {
+        grid-template-columns: 1fr;
+    }
+    
+    .shoppaton-admin-form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .shoppaton-modal-content {
+        max-height: 100vh;
+        border-radius: 0;
+    }
+    
+    .shoppaton-admin-table {
+        font-size: 13px;
+    }
+    
+    .shoppaton-admin-table th,
+    .shoppaton-admin-table td {
+        padding: 10px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .shoppaton-admin-sidebar,
+    .shoppaton-admin-nav,
+    .shoppaton-admin-actions,
+    .shoppaton-modal {
+        display: none !important;
+    }
+    
+    .shoppaton-admin-content {
+        width: 100%;
+    }
+    
+    .shoppaton-glass-card {
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+}
